@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, District, TouristPlace
+from .models import Category, District, TouristPlace, TouristPlaceImage
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +25,9 @@ class TouristPlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = TouristPlace
         fields = "__all__"
+
+class TouristPlaceImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TouristPlaceImage
+        fields = "__all__"
+        read_only_fields = ["id"]

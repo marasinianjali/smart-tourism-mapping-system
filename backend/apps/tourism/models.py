@@ -46,3 +46,13 @@ class TouristPlace(TimeStampedModel):
 
     def __str__(self):
         return self.name 
+    
+class TouristPlaceImage(models.Model):
+    place = models.ForeignKey(TouristPlace, related_name='images',
+                               on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='tourist_places/')
+    caption = models.CharField(max_length=255, blank=True)
+    is_primary = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Image for {self.place.name} - {self.caption}"
