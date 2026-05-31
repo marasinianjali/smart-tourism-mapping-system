@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import User, UserRole
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('email', 'full_name', 'role', 'is_active', 'is_staff')
+    search_fields = ('email', 'full_name')
+    list_filter = ('role', 'is_active', 'is_staff')
+    ordering = ('email',)
