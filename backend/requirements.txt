@@ -7,3 +7,4 @@ django-rest-framework-simplejwt==5.5.1
 django-rest-framework
 django-filters
 pillow
+
