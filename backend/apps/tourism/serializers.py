@@ -18,6 +18,9 @@ class TouristPlaceSerializer(serializers.ModelSerializer):
     district_name = serializers.CharField(
         source="district.name", read_only=True
     )
+    province_name = serializers.CharField(
+        source="district.province", read_only=True
+    )
     created_by_username = serializers.CharField(
         source="created_by.full_name", read_only=True
     )
