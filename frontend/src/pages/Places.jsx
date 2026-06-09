@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import SearchBar from "../components/SearchBar";
 import CategoryFilter from "../components/CategoryFilter";
 import ProvinceFilter from "../components/ProvinceFilter";
+import Layout from "../components/Layout";
 
 function Places() {
   const [places, setPlaces] = useState([]);
@@ -66,11 +67,11 @@ function Places() {
   console.log("FIRST PLACE:", places[0]);
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <Navbar />
-
-      <h1 className="text-3xl font-bold mb-6">
-        Tourist Places
-      </h1>
+      <Layout>
+        <h1 className="text-3xl font-bold mb-6">
+          Tourist Places
+        </h1>
+      </Layout>
 
       <SearchBar
         searchTerm={searchTerm}
@@ -88,7 +89,7 @@ function Places() {
         <p>Loading...</p>
       ) : (
         filteredPlaces.map((place) => (
-          
+
           <PlaceCard
             key={place.id}
             place={place}
