@@ -28,6 +28,13 @@ function Navbar() {
             Profile
           </Link>
 
+          <Link
+            to="/map"
+            className="hover:text-blue-600 transition font-medium"
+          >
+            Map
+          </Link>
+
           <button
             onClick={() => {
               localStorage.removeItem("access");
