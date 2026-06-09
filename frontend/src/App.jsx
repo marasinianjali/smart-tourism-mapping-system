@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Places from "./pages/Places";
 import PlaceDetail from "./pages/PlaceDetail";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/places" element={<Places />} />
         <Route path="/places/:id" element={<PlaceDetail />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

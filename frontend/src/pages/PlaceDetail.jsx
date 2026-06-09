@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Layout from "../components/Layout";
 import api from "../api/axios";
 
 
@@ -36,9 +37,15 @@ function PlaceDetail() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
+       
+            <Layout>
+                <h1 className="text-3xl font-bold mb-6">
+                    Place Details
+                </h1> 
+           
 
-            <div className="bg-white shadow-md rounded-lg p-6">
+            <div className="bg-white shadow-md rounded-lg p-4 
+                            mb-4 hover:shadow-xl transition cursor-pointer">
 
                 <h1 className="text-4xl font-bold mb-4">
                     {place.name}
@@ -71,8 +78,9 @@ function PlaceDetail() {
                 </div>
 
             </div>
-
-        </div>
+        </Layout>
+       
+       
     );
 }
 
