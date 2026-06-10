@@ -2,6 +2,8 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import Layout from "../components/Layout";
 import { useState, useEffect } from "react";
 import api from "../api/axios";
+import { Link } from "react-router-dom";
+import PlacePopup from "../components/PlacePopup";
 
 function TourismMap() {
   const [places, setPlaces] = useState([]);
@@ -21,7 +23,7 @@ function TourismMap() {
         }
       );
       console.log(response.data.results);
-  
+
 
       setPlaces(response.data.results);
 
@@ -29,7 +31,7 @@ function TourismMap() {
       console.error(error);
     }
   };
-  
+
   return (
     <Layout>
       <h1 className="text-3xl font-bold mb-6">
@@ -48,7 +50,7 @@ function TourismMap() {
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        
+
         {places.map((place) => (
           <Marker
             key={place.id}
@@ -58,7 +60,7 @@ function TourismMap() {
             ]}
           >
             <Popup>
-              {place.name}
+              <PlacePopup place={place} />
             </Popup>
           </Marker>
         ))}
