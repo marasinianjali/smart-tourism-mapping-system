@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import api from "../api/axios";
 import { Link } from "react-router-dom";
 import PlacePopup from "../components/PlacePopup";
+import DistrictLayer from "../components/DistrictLayer";
 
 function TourismMap() {
   const [places, setPlaces] = useState([]);
@@ -50,6 +51,7 @@ function TourismMap() {
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <DistrictLayer places={places} />
 
         {places.map((place) => (
           <Marker
