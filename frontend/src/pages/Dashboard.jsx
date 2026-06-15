@@ -28,7 +28,7 @@ function Dashboard() {
         }
     };
     const totalPlaces = places.length;
-    
+
 
     const uniqueDistricts = new Set(
         places.map((place) => place.district_name)
@@ -39,7 +39,7 @@ function Dashboard() {
     const uniqueCategories = new Set(
         places.map((place) => place.category_name)
     );
-    
+
     const categoryCount = uniqueCategories.size;
     const featuredPlaces = places.filter(
         (place) => place.is_featured
@@ -48,12 +48,12 @@ function Dashboard() {
     const categoryStats = {};
     const districtStats = {};
     const recentPlaces = [...places]
-    .sort(
-        (a, b) =>
-            new Date(b.created_at) -
-            new Date(a.created_at)
-    )
-    .slice(0, 5);
+        .sort(
+            (a, b) =>
+                new Date(b.created_at) -
+                new Date(a.created_at)
+        )
+        .slice(0, 5);
     places.forEach((place) => {
         const category = place.category_name;
 
@@ -63,7 +63,7 @@ function Dashboard() {
             categoryStats[category] = 1;
         }
     });
-   places.forEach((place) => {
+    places.forEach((place) => {
         const district = place.district_name;
 
         if (districtStats[district]) {
@@ -72,13 +72,17 @@ function Dashboard() {
             districtStats[district] = 1;
         }
     });
-    
+
 
     return (
         <Layout>
-            <h1 className="text-3xl font-bold mb-6">
+            <h1 className="text-4xl font-bold">
                 Tourism Dashboard
             </h1>
+
+            <p className="text-gray-500 mt-2">
+                Overview of tourism statistics and activity.
+            </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <StatsCard
@@ -105,12 +109,19 @@ function Dashboard() {
                     Places by Category
                 </h2>
 
-                <div className="bg-white rounded-lg shadow-md p-4 max-w-md">
+                <div className="bg-white rounded-lg shadow-md p-4 w-full">
                     {Object.entries(categoryStats).map(
                         ([category, count]) => (
                             <div
                                 key={category}
-                                className="flex justify-between border-b py-3"
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    gap: "5px",
+                                    padding: "12px 0",
+                                    margin: "0 10px",
+
+                                }}
                             >
                                 <span>{category}</span>
                                 <span>{count}</span>
@@ -126,15 +137,22 @@ function Dashboard() {
 
                 <div className="bg-white rounded-lg shadow-md p-4">
                     {Object.entries(districtStats).map(
-                    ([district, count]) => (
-                        <div
-                        key={district}
-                        className="flex justify-between items-center border-b py-3"
-                        >
-                        <span>{district}</span>
-                        <span>{count}</span>
-                        </div>
-                    )
+                        ([district, count]) => (
+                            <div
+                                key={district}
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    gap: "5px",
+                                    padding: "12px 0",
+                                    margin: "0 10px",
+
+                                }}
+                            >
+                                <span>{district}</span>
+                                <span>{count}</span>
+                            </div>
+                        )
                     )}
                 </div>
             </div>
@@ -154,7 +172,14 @@ function Dashboard() {
                             </p>
 
                             <p className="text-sm text-gray-500">
-                                {place.created_at}
+                                {new Date(place.created_at).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                    }
+                                )}
                             </p>
                         </div>
                     ))}
