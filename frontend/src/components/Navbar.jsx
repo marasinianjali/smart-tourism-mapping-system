@@ -4,7 +4,12 @@ function Navbar() {
   return (
     <nav className="bg-white shadow-md border-b">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-
+        <Link
+          to="/dashboard"
+          className="hover:text-blue-300 transition"
+        >
+          Dashboard
+        </Link>
         <Link
           to="/places"
           className="text-2xl font-bold text-slate-800"
@@ -34,6 +39,7 @@ function Navbar() {
           >
             Map
           </Link>
+
 
           <button
             onClick={() => {
