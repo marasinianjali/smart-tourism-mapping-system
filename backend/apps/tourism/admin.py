@@ -15,7 +15,8 @@ class DistrictAdmin(admin.ModelAdmin):
 
 @admin.register(TouristPlace)
 class TouristPlaceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'category', 'district', 'is_active', 'is_featured', 'latitude', 'longitude')
+    list_display = ('id', 'name', 'category', 'district', 'is_active', 'is_featured', 'latitude', 'longitude', 
+                   )
     search_fields = ('name', 'description')
     list_filter = ('category', 'district', 'is_active', 'is_featured')
 
