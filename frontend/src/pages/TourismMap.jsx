@@ -1,4 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import Layout from "../components/Layout";
 import { useState, useEffect } from "react";
 import api from "../api/axios";
@@ -53,19 +54,21 @@ function TourismMap() {
         />
         <DistrictLayer places={places} />
 
-        {places.map((place) => (
-          <Marker
-            key={place.id}
-            position={[
-              Number(place.latitude),
-              Number(place.longitude),
-            ]}
-          >
-            <Popup>
-              <PlacePopup place={place} />
-            </Popup>
-          </Marker>
-        ))}
+        <MarkerClusterGroup>
+          {places.map((place) => (
+            <Marker
+              key={place.id}
+              position={[
+                Number(place.latitude),
+                Number(place.longitude),
+              ]}
+            >
+              <Popup>
+                <PlacePopup place={place} />
+              </Popup>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
       </MapContainer>
     </Layout>
   );
