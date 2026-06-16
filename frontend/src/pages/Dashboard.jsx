@@ -2,6 +2,23 @@ import Layout from "../components/Layout";
 import StatsCard from "../components/StatsCard";
 import { useState, useEffect } from "react";
 import api from "../api/axios";
+import {
+    PieChart,
+    Pie,
+    Cell,
+    Tooltip,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    ResponsiveContainer,
+} from "recharts";
+const COLORS = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+];
 
 function Dashboard() {
     const [places, setPlaces] = useState([]);
@@ -72,6 +89,19 @@ function Dashboard() {
             districtStats[district] = 1;
         }
     });
+    const categoryChartData = Object.entries(categoryStats).map(
+        ([name, value]) => ({
+            name,
+            value,
+        })
+    );
+
+    const districtChartData = Object.entries(districtStats).map(
+        ([name, value]) => ({
+            name,
+            value,
+        })
+    );
 
 
     return (
@@ -97,7 +127,7 @@ function Dashboard() {
 
                 <StatsCard
                     title="Categories"
-                    value={categoryCount}
+                    value={categoryCount}   
                 />
                 <StatsCard
                     title="Featured Places"
@@ -183,6 +213,68 @@ function Dashboard() {
                             </p>
                         </div>
                     ))}
+                </div>
+            </div>
+            <div className="mt-10">
+                <h2 className="text-2xl font-bold mb-4">
+                    Category Distribution
+                </h2>
+                <div className="bg-white rounded-lg shadow-md p-4">
+                    <ResponsiveContainer
+                        width="100%"
+                        height={300}
+                    >
+                        <PieChart>
+                            <Pie
+                                data={categoryChartData}
+                                dataKey="value"
+                                nameKey="name"
+                                outerRadius={100}
+                            >
+                                {categoryChartData.map(
+                                    (entry, index) => (
+                                        <Cell
+                                            key={index}
+                                            fill={
+                                                COLORS[
+                                                    index %
+                                                    COLORS.length
+                                                ]
+                                            }
+                                        />
+                                    )
+                                )}
+                            </Pie>
+
+                            <Tooltip />
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
+            </div>
+            <div className="mt-10">
+                <h2 className="text-2xl font-bold mb-4">
+                    Places by District Chart
+                </h2>
+
+                <div className="bg-white rounded-lg shadow-md p-4">
+                    <ResponsiveContainer
+                        width="100%"
+                        height={300}
+                    >
+                        <BarChart
+                            data={districtChartData}
+                        >
+                            <XAxis dataKey="name" />
+
+                            <YAxis />
+
+                            <Tooltip />
+
+                            <Bar
+                                dataKey="value"
+                            />
+                        </BarChart>
+                    </ResponsiveContainer>
                 </div>
             </div>
         </Layout>
