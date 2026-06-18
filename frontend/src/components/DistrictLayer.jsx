@@ -33,21 +33,27 @@ function DistrictLayer({ places }) {
         console.log(feature.properties);
         const districtName =
             feature.properties.DISTRICT;
-            console.log(
-                "GEOJSON DISTRICT:",
-                districtName
-            );
+        console.log(
+            "GEOJSON DISTRICT:",
+            districtName
+        );
 
         const districtPlaces = places.filter(
             (place) =>
-                place.district_name.toUpperCase() ===
-                districtName
-               
+                place.district_name?.trim().toUpperCase() ===
+                districtName?.trim().toUpperCase()
         );
-         console.log(
-                    "FIRST API DISTRICT:",
-                    places[0]?.district_name
-                );
+        console.log(
+            "MATCHES:",
+            districtPlaces.length
+        );
+       
+        console.log(
+            "ALL API DISTRICTS:",
+            places.map(
+                (place) => place.district_name
+            )
+        );
 
         layer.bindPopup(`
             <strong>${districtName}</strong>
