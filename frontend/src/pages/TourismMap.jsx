@@ -1,4 +1,10 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+} from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import Layout from "../components/Layout";
 import { useState, useEffect } from "react";
@@ -9,6 +15,8 @@ import DistrictLayer from "../components/DistrictLayer";
 
 function TourismMap() {
   const [places, setPlaces] = useState([]);
+  const [startPlace, setStartPlace] = useState(null);
+  const [endPlace, setEndPlace] = useState(null);
   console.log("MAP PLACES:", places);
   useEffect(() => {
     fetchPlaces();
@@ -25,6 +33,7 @@ function TourismMap() {
         }
       );
       console.log(response.data.results);
+      console.log(response.data);
 
 
       setPlaces(response.data.results);
@@ -33,13 +42,24 @@ function TourismMap() {
       console.error(error);
     }
   };
+  
 
   return (
     <Layout>
       <h1 className="text-3xl font-bold mb-6">
         Tourism Map
       </h1>
+      <div className="mb-4 p-4 bg-white rounded shadow">
+        <p>
+          <strong>Start:</strong>{" "}
+          {startPlace ? startPlace.name : "Not selected"}
+        </p>
 
+        <p>
+          <strong>End:</strong>{" "}
+          {endPlace ? endPlace.name : "Not selected"}
+        </p>
+      </div>
       <MapContainer
         center={[28.3949, 84.1240]}
         zoom={7}
@@ -53,6 +73,24 @@ function TourismMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <DistrictLayer places={places} />
+        {startPlace && endPlace && (
+          <Polyline
+            pathOptions={{
+              color: "red",
+              weight: 5,
+            }}
+            positions={[
+              [
+                Number(startPlace.latitude),
+                Number(startPlace.longitude),
+              ],
+              [
+                Number(endPlace.latitude),
+                Number(endPlace.longitude),
+              ],
+            ]}
+          />
+        )}
 
         <MarkerClusterGroup>
           {places.map((place) => (
@@ -64,8 +102,24 @@ function TourismMap() {
               ]}
             >
               <Popup>
-                <PlacePopup place={place} 
-                      places = {places}/>
+                <button
+                  onClick={() => setStartPlace(place)}
+                  className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                >
+                  Start
+                </button>
+
+                <button
+                  onClick={() => setEndPlace(place)}
+                  className="bg-blue-500 text-white px-2 py-1 rounded"
+                >
+                  End
+                </button>
+
+                <PlacePopup
+                  place={place}
+                  places={places}
+                />
               </Popup>
             </Marker>
           ))}

@@ -44,10 +44,14 @@ function DistrictLayer({ places }) {
                 districtName?.trim().toUpperCase()
         );
         console.log(
+            "DISTRICT PLACES:",
+            districtPlaces
+        );
+        console.log(
             "MATCHES:",
             districtPlaces.length
         );
-       
+
         console.log(
             "ALL API DISTRICTS:",
             places.map(
