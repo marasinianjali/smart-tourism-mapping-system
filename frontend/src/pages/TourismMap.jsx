@@ -64,7 +64,8 @@ function TourismMap() {
               ]}
             >
               <Popup>
-                <PlacePopup place={place} />
+                <PlacePopup place={place} 
+                      places = {places}/>
               </Popup>
             </Marker>
           ))}
