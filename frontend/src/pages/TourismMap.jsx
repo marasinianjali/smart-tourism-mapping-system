@@ -12,6 +12,7 @@ import api from "../api/axios";
 import { Link } from "react-router-dom";
 import PlacePopup from "../components/PlacePopup";
 import DistrictLayer from "../components/DistrictLayer";
+import HeatmapLayer from "../components/HeatmapLayer";
 
 function TourismMap() {
   const [places, setPlaces] = useState([]);
@@ -32,8 +33,8 @@ function TourismMap() {
           },
         }
       );
-      console.log(response.data.results);
-      console.log(response.data);
+      // console.log(response.data.results);
+      // console.log(response.data);
 
 
       setPlaces(response.data.results);
@@ -72,6 +73,7 @@ function TourismMap() {
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <HeatmapLayer places={places} />
         <DistrictLayer places={places} />
         {startPlace && endPlace && (
           <Polyline

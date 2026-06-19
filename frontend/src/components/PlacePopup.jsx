@@ -52,15 +52,7 @@ function PlacePopup({ place, places }) {
         a.distance - b.distance
     )
     .slice(0, 3);
-  console.log(
-    "CURRENT:",
-    place.name
-  );
-
-  console.log(
-    "ALL:",
-    places.length
-  );
+  
   return (
     <div className="min-w-[200px]">
 
