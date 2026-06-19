@@ -62,6 +62,16 @@ function Dashboard() {
         (place) => place.is_featured
     ).length;
 
+    const featuredPlaceList =
+        places.filter(
+            (place) => place.is_featured
+        );
+
+    const averagePlaces =
+        districtCount > 0
+            ? (totalPlaces / districtCount).toFixed(1)
+            : 0;
+
     const categoryStats = {};
     const districtStats = {};
     const recentPlaces = [...places]
@@ -102,7 +112,9 @@ function Dashboard() {
             value,
         })
     );
-
+    const topDistricts = [...districtChartData]
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5);
 
     return (
         <Layout>
@@ -127,12 +139,49 @@ function Dashboard() {
 
                 <StatsCard
                     title="Categories"
-                    value={categoryCount}   
+                    value={categoryCount}
                 />
                 <StatsCard
                     title="Featured Places"
                     value={featuredPlaces}
                 />
+                <StatsCard
+                    title="Avg Places / District"
+                    value={averagePlaces}
+                />
+            </div>
+            <div className="mt-10">
+                <h2 className="text-2xl font-bold mb-4">
+                    Top Districts
+                </h2>
+
+                <div className="bg-white rounded-lg shadow-md p-4">
+                    {topDistricts.map((district) => (
+                        <div
+                            key={district.name}
+                            className="flex justify-between py-2"
+                        >
+                            <span>{district.name}</span>
+                            <span>{district.value}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="mt-10">
+                <h2 className="text-2xl font-bold mb-4">
+                    Featured Places
+                </h2>
+
+                <div className="bg-white rounded-lg shadow-md p-4">
+                    {featuredPlaceList.map((place) => (
+                        <div
+                            key={place.id}
+                            className="border-b py-3"
+                        >
+                            ⭐ {place.name}
+                        </div>
+                    ))}
+                </div>
             </div>
             <div className="mt-10">
                 <h2 className="text-2xl font-bold mb-4">
@@ -237,8 +286,8 @@ function Dashboard() {
                                             key={index}
                                             fill={
                                                 COLORS[
-                                                    index %
-                                                    COLORS.length
+                                                index %
+                                                COLORS.length
                                                 ]
                                             }
                                         />
