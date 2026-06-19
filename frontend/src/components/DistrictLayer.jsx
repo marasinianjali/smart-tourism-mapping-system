@@ -33,31 +33,13 @@ function DistrictLayer({ places }) {
         console.log(feature.properties);
         const districtName =
             feature.properties.DISTRICT;
-        console.log(
-            "GEOJSON DISTRICT:",
-            districtName
-        );
 
         const districtPlaces = places.filter(
             (place) =>
                 place.district_name?.trim().toUpperCase() ===
                 districtName?.trim().toUpperCase()
         );
-        console.log(
-            "DISTRICT PLACES:",
-            districtPlaces
-        );
-        console.log(
-            "MATCHES:",
-            districtPlaces.length
-        );
-
-        console.log(
-            "ALL API DISTRICTS:",
-            places.map(
-                (place) => place.district_name
-            )
-        );
+       
 
         layer.bindPopup(`
             <strong>${districtName}</strong>
@@ -87,7 +69,7 @@ function DistrictLayer({ places }) {
     const resetHighlight = (e) => {
         e.target.setStyle(districtStyle);
     };
-
+    console.log("PLACES COUNT:", places.length);
     return (
         <GeoJSON
             data={districts}
