@@ -24,6 +24,9 @@ class TouristPlaceSerializer(serializers.ModelSerializer):
     created_by_username = serializers.CharField(
         source="created_by.full_name", read_only=True
     )
+    approved_by_username = serializers.CharField(
+        source="approved_by.full_name", read_only=True
+    )
 
     class Meta:
         model = TouristPlace

@@ -7,6 +7,7 @@ from .filters import TouristPlaceFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status 
+from django.utils import timezone
 
 from .models import Category, District, TouristPlace, TouristPlaceImage
 from .serializers import( CategorySerializer, DistrictSerializer, 
@@ -34,23 +35,51 @@ class TouristPlaceViewSet(viewsets.ModelViewSet):
         SearchFilter,
         OrderingFilter,
     ]
-
     filterset_class = TouristPlaceFilter
-
     search_fields = [
         'name',
         'description',
         'address',
     ]
-
     ordering_fields = [
         'name',
         'created_at',
     ]
 
-
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
+    @action(detail=True, methods=["post"])
+    def approve(self, request, pk=None):
+        place = self.get_object()
+
+        place.status = "approved"
+        place.approved_by = request.user
+        place.approved_at = timezone.now()
+        place.rejection_reason = ""
+
+        place.save()
+
+        return Response({
+            "message": "Place approved successfully"
+        })
+    @action(detail=True, methods=["post"])
+    def reject(self, request, pk=None):
+        place = self.get_object()
+
+        place.status = "rejected"
+        place.approved_by = request.user
+
+        place.rejection_reason = request.data.get(
+            "reason",
+            ""
+        )
+
+        place.save()
+
+        return Response({
+            "message": "Place rejected successfully"
+        })
 
 class TouristPlaceImageViewSet(viewsets.ModelViewSet):
     queryset = TouristPlaceImage.objects.all()

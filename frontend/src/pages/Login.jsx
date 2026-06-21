@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { login } from "../services/authService";
+
 import { useNavigate } from "react-router-dom";
+import {
+  login,
+  getProfile,
+} from "../services/authService";
 
 function Login() {
   const navigate = useNavigate();
@@ -14,9 +18,13 @@ function Login() {
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);
 
+      const profile = await getProfile();
+      localStorage.setItem("role", profile.role);
+
       navigate("/places"); 
 
     } catch (error) {
+      console.log(error.response?.data);
       console.error(error);
     }
   };

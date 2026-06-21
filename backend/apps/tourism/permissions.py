@@ -1,26 +1,45 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import (
+    BasePermission,
+    SAFE_METHODS,
+)
 
 
 class TouristPlacePermission(BasePermission):
 
-    def has_permission(self, request, view):
-
+    def has_permission(
+        self,
+        request,
+        view
+    ):
         user = request.user
 
-        if not user or not user.is_authenticated:
+        if not user.is_authenticated:
             return False
 
-        # Read-only access for everyone authenticated (or you can allow public)
-        if request.method in SAFE_METHODS:
-            return True
-
-        # IMPORTANT: superuser bypass
         if user.is_superuser:
             return True
 
-        # role-based access
-        return user.role in [
-            "SUPER_ADMIN",
-            "MUNICIPALITY_ADMIN",
-            "DATA_ENTRY_USER",
-        ]
+        # Read operations
+        if request.method in SAFE_METHODS:
+            return True
+
+        # Approval workflow
+        if view.action in [
+            "approve",
+            "reject",
+        ]:
+            return (
+                user.role in [
+                    "SUPER_ADMIN",
+                    "MUNICIPALITY_ADMIN",
+                ]
+            )
+
+        # CRUD
+        return (
+            user.role in [
+                "SUPER_ADMIN",
+                "MUNICIPALITY_ADMIN",
+                "DATA_ENTRY_USER",
+            ]
+        )

@@ -32,7 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     role = models.CharField(max_length=50, 
                             choices=UserRole.choices,
-                            default="PUBLIC_USER")
+                            default=UserRole.PUBLIC_USER)
     
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
