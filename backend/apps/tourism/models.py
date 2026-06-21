@@ -30,6 +30,11 @@ class District(models.Model):
         return self.name
     
 class TouristPlace(TimeStampedModel):
+    STATUS_CHOICES = (
+    ("pending", "Pending"),
+    ("approved", "Approved"),
+    ("rejected", "Rejected"),
+    )
     name = models.CharField(max_length=200)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -37,10 +42,17 @@ class TouristPlace(TimeStampedModel):
     address = models.CharField(max_length=255, blank=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
-
-    # Track who created and last updated the tourist place
+    status = models.CharField(
+            max_length=20,
+            choices=STATUS_CHOICES,
+            default="pending",
+        )
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, 
                                    null=True, blank=True)
+    approved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, 
+                                    null=True, blank=True, related_name='approved_places')
+    approved_at = models.DateTimeField(null=True, blank=True)
+    rejection_reason = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
 
