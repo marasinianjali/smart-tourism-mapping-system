@@ -7,6 +7,8 @@ import PlaceDetail from "./pages/PlaceDetail";
 import Profile from "./pages/Profile";
 import TourismMap from "./pages/TourismMap";
 import Dashboard from "./pages/Dashboard";
+import CreatePlace from "./pages/CreatePlace";
+import EditPlace from "./pages/EditPlace";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/map" element={<TourismMap />}/>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/create-place" element={<CreatePlace />} />
+        <Route path="/edit-place/:id" element={<EditPlace />} />
       </Routes>
     </BrowserRouter>
   );
