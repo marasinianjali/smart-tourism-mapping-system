@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import {
   approvePlace,
   rejectPlace,
+  deletePlace,
 } from "../services/placeService";
 
 function PlaceCard({ place }) {
@@ -24,6 +25,24 @@ function PlaceCard({ place }) {
 
     try {
       await rejectPlace(place.id);
+
+      window.location.reload();
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleDelete = async (e) => {
+    e.preventDefault();
+
+    const confirmed = window.confirm(
+      "Are you sure?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deletePlace(place.id);
 
       window.location.reload();
 
@@ -62,20 +81,31 @@ function PlaceCard({ place }) {
           Current Role: {role}
         </p>
         {role === "MUNICIPALITY_ADMIN" && (
-          <button 
-            onClick={handleApprove} 
+          <button
+            onClick={handleApprove}
             className="bg-green-500 text-white px-3 py-1 rounded mt-2 mr-2">
             Approve
           </button>
         )}
 
         {role === "MUNICIPALITY_ADMIN" && (
-          <button 
-            onClick={handleReject} 
+          <button
+            onClick={handleReject}
             className="bg-red-500 text-white px-3 py-1 rounded mt-2">
             Reject
           </button>
         )}
+        {[
+          "MUNICIPALITY_ADMIN",
+          "DATA_ENTRY_USER",
+        ].includes(role) && (
+            <button
+              onClick={handleDelete}
+              className="bg-gray-700 text-white px-3 py-1 rounded mt-2 ml-2"
+            >
+              Delete
+            </button>
+          )}
       </div>
     </Link>
   );
