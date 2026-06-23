@@ -25,3 +25,14 @@ export const rejectPlace = async (id) => {
         }
     );
 };
+
+export const deletePlace = async (id) => {
+    return await api.delete(
+        `tourism/places/${id}/`,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("access")}`,
+            },
+        }
+    );
+};
