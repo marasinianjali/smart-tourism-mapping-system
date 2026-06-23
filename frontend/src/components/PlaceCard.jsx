@@ -107,6 +107,12 @@ function PlaceCard({ place }) {
             </button>
           )}
       </div>
+      <Link
+        to={`/edit-place/${place.id}`}
+        className="bg-yellow-500 text-white px-3 py-1 rounded mt-2 ml-2 inline-block"
+      >
+        Edit
+      </Link>
     </Link>
   );
 }
