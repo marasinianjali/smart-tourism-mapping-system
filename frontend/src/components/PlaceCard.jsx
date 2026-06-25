@@ -1,19 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   approvePlace,
   rejectPlace,
   deletePlace,
 } from "../services/placeService";
 
-function PlaceCard({ place }) {
+
+function PlaceCard({ place, onPlaceUpdated, }) {
   const role = localStorage.getItem("role");
+  const navigate = useNavigate();
   const handleApprove = async (e) => {
     e.preventDefault();
 
     try {
       await approvePlace(place.id);
 
-      window.location.reload();
+      onPlaceUpdated();
+      toast.success(
+        "Place Approved"
+      );
 
     } catch (error) {
       console.error(error);
@@ -26,7 +32,10 @@ function PlaceCard({ place }) {
     try {
       await rejectPlace(place.id);
 
-      window.location.reload();
+      onPlaceUpdated();
+      toast.success(
+        "Place Rejected"
+      );
 
     } catch (error) {
       console.error(error);
@@ -44,7 +53,10 @@ function PlaceCard({ place }) {
     try {
       await deletePlace(place.id);
 
-      window.location.reload();
+      onPlaceUpdated();
+      toast.success(
+        "Place Deleted"
+      );
 
     } catch (error) {
       console.error(error);
@@ -106,13 +118,22 @@ function PlaceCard({ place }) {
               Delete
             </button>
           )}
+        {[
+          "MUNICIPALITY_ADMIN",
+          "DATA_ENTRY_USER",
+        ].includes(role) && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(`/edit-place/${place.id}`);
+              }}
+              className="bg-yellow-500 text-white px-3 py-1 rounded"
+            >
+              Edit
+            </button>
+          )}
       </div>
-      <Link
-        to={`/edit-place/${place.id}`}
-        className="bg-yellow-500 text-white px-3 py-1 rounded mt-2 ml-2 inline-block"
-      >
-        Edit
-      </Link>
+
     </Link>
   );
 }

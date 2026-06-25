@@ -1,4 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -10,19 +14,76 @@ import Dashboard from "./pages/Dashboard";
 import CreatePlace from "./pages/CreatePlace";
 import EditPlace from "./pages/EditPlace";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/places" element={<Places />} />
-        <Route path="/places/:id" element={<PlaceDetail />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/map" element={<TourismMap />}/>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/create-place" element={<CreatePlace />} />
-        <Route path="/edit-place/:id" element={<EditPlace />} />
+
+        <Route
+          path="/"
+          element={<Home />}
+        />
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/places"
+          element={<Places />}
+        />
+
+        <Route
+          path="/places/:id"
+          element={<PlaceDetail />}
+        />
+
+        <Route
+          path="/profile"
+          element={<Profile />}
+        />
+
+        <Route
+          path="/map"
+          element={<TourismMap />}
+        />
+
+        <Route
+          path="/dashboard"
+          element={<Dashboard />}
+        />
+
+        <Route
+          path="/create-place"
+          element={
+            <ProtectedRoute
+              allowedRoles={[
+                "MUNICIPALITY_ADMIN",
+                "DATA_ENTRY_USER",
+              ]}
+            >
+              <CreatePlace />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/edit-place/:id"
+          element={
+            <ProtectedRoute
+              allowedRoles={[
+                "MUNICIPALITY_ADMIN",
+                "DATA_ENTRY_USER",
+              ]}
+            >
+              <EditPlace />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );
