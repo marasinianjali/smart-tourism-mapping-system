@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
 import Layout from "../components/Layout";
+import toast from "react-hot-toast";
 
 function CreatePlace() {
     const [formData, setFormData] = useState({
@@ -56,18 +57,50 @@ function CreatePlace() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Validation
+        if (!formData.name.trim()) {
+            toast.error("Place name is required");
+            return;
+        }
+
+        if (!formData.category) {
+            toast.error("Select category");
+            return;
+        }
+
+        if (!formData.district) {
+            toast.error("Select district");
+            return;
+        }
+
+        const lat = Number(formData.latitude);
+        const lng = Number(formData.longitude);
+
+        if (lat < -90 || lat > 90) {
+            toast.error("Invalid latitude");
+            return;
+        }
+
+        if (lng < -180 || lng > 180) {
+            toast.error("Invalid longitude");
+            return;
+        }
+        
         try {
             await api.post(
                 "tourism/places/",
                 formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("access")}`,
+                        Authorization:
+                            `Bearer ${localStorage.getItem("access")}`,
                     },
                 }
             );
 
-            alert("Place Created Successfully");
+            toast.success(
+                "Place Created Successfully"
+            );
 
             setFormData({
                 name: "",
@@ -82,6 +115,10 @@ function CreatePlace() {
 
         } catch (error) {
             console.error(error);
+
+            toast.error(
+                "Failed to create place"
+            );
         }
     };
     return (

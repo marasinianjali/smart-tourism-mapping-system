@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
 import PlaceCard from "../components/PlaceCard";
-import Navbar from "../components/Navbar";
 import SearchBar from "../components/SearchBar";
 import CategoryFilter from "../components/CategoryFilter";
 import ProvinceFilter from "../components/ProvinceFilter";
-import Layout from "../components/Layout";
+import { Link } from "react-router-dom";
 
 function Places() {
   const [places, setPlaces] = useState([]);
@@ -14,6 +13,7 @@ function Places() {
   console.log("SEARCH TERM:", searchTerm);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   useEffect(() => {
     fetchPlaces();
@@ -58,20 +58,52 @@ function Places() {
       selectedProvince === "" ||
       place.province_name === selectedProvince;
 
+    const matchesStatus =
+      selectedStatus === "" ||
+      place.status === selectedStatus;
+
     return (
       matchesSearch &&
       matchesCategory &&
-      matchesProvince
+      matchesProvince &&
+      matchesStatus
     );
   });
+  const role =
+    localStorage.getItem("role");
+
+  const visiblePlaces =
+    role === "PUBLIC_USER"
+      ? filteredPlaces.filter(
+        (place) =>
+          place.status === "approved"
+      )
+      : filteredPlaces;
+
   console.log("FIRST PLACE:", places[0]);
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <Layout>
-        <h1 className="text-3xl font-bold mb-6">
+      <div className="flex justify-between items-center mb-6">
+
+        <h1 className="text-3xl font-bold">
           Tourist Places
         </h1>
-      </Layout>
+
+        {[
+          "MUNICIPALITY_ADMIN",
+          "DATA_ENTRY_USER",
+        ].includes(
+          localStorage.getItem("role")
+        ) && (
+            <Link
+              to="/create-place"
+              className="bg-green-600 text-white px-4 py-2 rounded"
+            >
+              + Add Place
+            </Link>
+          )}
+
+      </div>
 
       <SearchBar
         searchTerm={searchTerm}
@@ -85,14 +117,43 @@ function Places() {
         selectedProvince={selectedProvince}
         setSelectedProvince={setSelectedProvince}
       />
+      {role !== "PUBLIC_USER" && (
+        <select
+          value={selectedStatus}
+          onChange={(e) =>
+            setSelectedStatus(
+              e.target.value
+            )
+          }
+          className="border p-2 rounded"
+        >
+          <option value="">
+            All Statuses
+          </option>
+
+          <option value="pending">
+            Pending
+          </option>
+
+          <option value="approved">
+            Approved
+          </option>
+
+          <option value="rejected">
+            Rejected
+          </option>
+        </select>
+      )}
+
       {loading ? (
         <p>Loading...</p>
       ) : (
-        filteredPlaces.map((place) => (
+        visiblePlaces.map((place) => (
 
           <PlaceCard
             key={place.id}
             place={place}
+            onPlaceUpdated={fetchPlaces}
           />
         ))
       )}
