@@ -82,6 +82,7 @@ function Places() {
 
   console.log("FIRST PLACE:", places[0]);
   return (
+    
     <div className="max-w-5xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
 

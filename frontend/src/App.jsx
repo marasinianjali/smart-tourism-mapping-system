@@ -7,6 +7,7 @@ import {
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Places from "./pages/Places";
+import Explore from "./pages/Explore";
 import PlaceDetail from "./pages/PlaceDetail";
 import Profile from "./pages/Profile";
 import TourismMap from "./pages/TourismMap";
@@ -34,6 +35,10 @@ function App() {
         <Route
           path="/places"
           element={<Places />}
+        />
+        <Route
+          path="/explore"
+          element={<Explore />}
         />
 
         <Route
