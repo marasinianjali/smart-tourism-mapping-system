@@ -12,18 +12,18 @@ class TouristPlacePermission(BasePermission):
         view
     ):
         user = request.user
-
+        # Read operations
+        if request.method in SAFE_METHODS:
+            return True
+        
         if not user.is_authenticated:
             return False
 
         if user.is_superuser:
             return True
 
-        # Read operations
-        if request.method in SAFE_METHODS:
-            return True
 
-        # Approval workflow
+        # Approval workflow for SUPER_ADMIN and MUNICIPALITY_ADMIN
         if view.action in [
             "approve",
             "reject",
@@ -35,7 +35,7 @@ class TouristPlacePermission(BasePermission):
                 ]
             )
 
-        # CRUD
+        # CRUD operations for SUPER_ADMIN, MUNICIPALITY_ADMIN, and DATA_ENTRY_USER
         return (
             user.role in [
                 "SUPER_ADMIN",
