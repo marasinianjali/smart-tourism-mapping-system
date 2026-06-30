@@ -30,9 +30,10 @@ function DistrictLayer({ places }) {
         return null;
     }
     const onEachFeature = (feature, layer) => {
-        console.log(feature.properties);
+        
         const districtName =
             feature.properties.DISTRICT;
+            
 
         const districtPlaces = places.filter(
             (place) =>
@@ -72,6 +73,7 @@ function DistrictLayer({ places }) {
     console.log("PLACES COUNT:", places.length);
     return (
         <GeoJSON
+            key={places.length}
             data={districts}
             style={districtStyle}
             onEachFeature={onEachFeature}

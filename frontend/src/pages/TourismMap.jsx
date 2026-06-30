@@ -18,49 +18,75 @@ function TourismMap() {
   const [places, setPlaces] = useState([]);
   const [startPlace, setStartPlace] = useState(null);
   const [endPlace, setEndPlace] = useState(null);
-  console.log("MAP PLACES:", places);
+
+  const role = localStorage.getItem("role");
+
+  const isAdmin = [
+    "MUNICIPALITY_ADMIN",
+    "DATA_ENTRY_USER",
+  ].includes(role);
+  const visiblePlaces = isAdmin
+    ? places
+    : places.filter(
+      (place) => place.status === "approved"
+    );
+
   useEffect(() => {
     fetchPlaces();
   }, []);
 
   const fetchPlaces = async () => {
     try {
-      const response = await api.get(
-        "tourism/places/",
-        {
+      const token = localStorage.getItem("access");
+
+      const config = token
+        ? {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
+        : {};
+
+      const response = await api.get(
+        "tourism/places/",
+        config
       );
       // console.log(response.data.results);
       // console.log(response.data);
 
 
       setPlaces(response.data.results);
+      console.log(
+        response.data.results.filter(
+          p => p.district_name === "Kathmandu"
+        )
+      );
 
     } catch (error) {
       console.error(error);
     }
+
   };
-  
+
 
   return (
     <Layout>
       <h1 className="text-3xl font-bold mb-6">
         Tourism Map
       </h1>
-      <div className="mb-4 p-4 bg-white rounded shadow">
-        <p>
-          <strong>Start:</strong>{" "}
-          {startPlace ? startPlace.name : "Not selected"}
-        </p>
+      {isAdmin && (
+        <div className="mb-4 p-4 bg-white rounded shadow">
+          <p>
+            <strong>Start:</strong>{" "}
+            {startPlace ? startPlace.name : "Not selected"}
+          </p>
 
-        <p>
-          <strong>End:</strong>{" "}
-          {endPlace ? endPlace.name : "Not selected"}
-        </p>
-      </div>
+          <p>
+            <strong>End:</strong>{" "}
+            {endPlace ? endPlace.name : "Not selected"}
+          </p>
+        </div>
+      )}
       <MapContainer
         center={[28.3949, 84.1240]}
         zoom={7}
@@ -73,8 +99,8 @@ function TourismMap() {
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <HeatmapLayer places={places} />
-        <DistrictLayer places={places} />
+        <HeatmapLayer places={visiblePlaces} />
+        <DistrictLayer places={visiblePlaces} />
         {startPlace && endPlace && (
           <Polyline
             pathOptions={{
@@ -94,8 +120,9 @@ function TourismMap() {
           />
         )}
 
-        <MarkerClusterGroup>
-          {places.map((place) => (
+
+        <MarkerClusterGroup key={visiblePlaces.length}>
+          {visiblePlaces.map((place) => (
             <Marker
               key={place.id}
               position={[
@@ -104,23 +131,27 @@ function TourismMap() {
               ]}
             >
               <Popup>
-                <button
-                  onClick={() => setStartPlace(place)}
-                  className="bg-green-500 text-white px-2 py-1 rounded mr-2"
-                >
-                  Start
-                </button>
+                {isAdmin && (
+                  <>
+                    <button
+                      onClick={() => setStartPlace(place)}
+                      className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                    >
+                      Start
+                    </button>
 
-                <button
-                  onClick={() => setEndPlace(place)}
-                  className="bg-blue-500 text-white px-2 py-1 rounded"
-                >
-                  End
-                </button>
+                    <button
+                      onClick={() => setEndPlace(place)}
+                      className="bg-blue-500 text-white px-2 py-1 rounded"
+                    >
+                      End
+                    </button>
+                  </>
+                )}
 
                 <PlacePopup
                   place={place}
-                  places={places}
+                  places={visiblePlaces}
                 />
               </Popup>
             </Marker>

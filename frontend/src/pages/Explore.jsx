@@ -23,7 +23,7 @@ function Explore() {
     const fetchPlaces = async () => {
         try {
             const response = await api.get(
-                "tourism/places/",   
+                "tourism/places/",
             );
             console.log("RESPONSE:", response.data);
             setPlaces(response.data.results);
@@ -54,9 +54,7 @@ function Explore() {
             matchesProvince
         );
     });
-    const visiblePlaces = filteredPlaces.filter(
-        (place) => place.status === "approved"
-    );
+
 
     console.log("FIRST PLACE:", places[0]);
     return (
@@ -83,8 +81,7 @@ function Explore() {
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                visiblePlaces.map((place) => (
-
+                filteredPlaces.map((place) => (
                     <PublicPlaceCard
                         key={place.id}
                         place={place}
