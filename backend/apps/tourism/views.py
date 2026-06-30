@@ -26,9 +26,22 @@ class DistrictViewSet(viewsets.ModelViewSet):
     permission_classes = [IsMunicipalityAdminOrSuperAdmin]
 
 class TouristPlaceViewSet(viewsets.ModelViewSet):
-    queryset = TouristPlace.objects.all()
     serializer_class = TouristPlaceSerializer
     permission_classes = [TouristPlacePermission]
+
+    def get_queryset(self):
+        queryset = TouristPlace.objects.all()
+
+        user = self.request.user
+
+        # Public visitors
+        if not user.is_authenticated:
+            return queryset.filter(
+                status="approved",
+                is_active=True,
+            )
+        # Admins
+        return queryset
 
     filter_backends = [
         DjangoFilterBackend,
