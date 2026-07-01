@@ -14,14 +14,20 @@ function PlaceDetail() {
     }, []);
     const fetchPlace = async () => {
         try {
-            const response = await api.get(
-                `tourism/places/${id}/`,
-                {
+            const token = localStorage.getItem("access");
+
+            const config = token
+                ? {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("access")}`,
+                        Authorization: `Bearer ${token}`,
                     },
                 }
+                : {};
+            const response = await api.get(
+                `tourism/places/${id}/`,
+                config
             );
+                   
 
             setPlace(response.data);
 

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { GeoJSON } from "react-leaflet";
+import { useNavigate } from "react-router-dom";
 
 
-function DistrictLayer({ places }) {
+function DistrictLayer({ places, onDistrictClick, }) {
     const [districts, setDistricts] = useState(null);
 
     useEffect(() => {
@@ -30,17 +31,15 @@ function DistrictLayer({ places }) {
         return null;
     }
     const onEachFeature = (feature, layer) => {
-        
+
         const districtName =
             feature.properties.DISTRICT;
-            
 
         const districtPlaces = places.filter(
             (place) =>
                 place.district_name?.trim().toUpperCase() ===
                 districtName?.trim().toUpperCase()
         );
-       
 
         layer.bindPopup(`
             <strong>${districtName}</strong>
@@ -51,8 +50,8 @@ function DistrictLayer({ places }) {
         layer.on({
             mouseover: highlightFeature,
             mouseout: resetHighlight,
+            click: () => onDistrictClick(districtName),
         });
-
     };
     const districtStyle = {
         color: "blue",

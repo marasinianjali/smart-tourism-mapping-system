@@ -14,6 +14,8 @@ import TourismMap from "./pages/TourismMap";
 import Dashboard from "./pages/Dashboard";
 import CreatePlace from "./pages/CreatePlace";
 import EditPlace from "./pages/EditPlace";
+import Districts from "./pages/Districts";
+import DistrictDetail from "./pages/DistrictDetail";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -59,6 +61,15 @@ function App() {
         <Route
           path="/dashboard"
           element={<Dashboard />}
+        /> 
+
+        <Route
+          path="/districts"
+          element={<Districts />}
+        />
+        <Route 
+          path="/districts/:districtName" 
+          element={<DistrictDetail />} 
         />
 
         <Route
@@ -88,6 +99,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+       
 
       </Routes>
     </BrowserRouter>
