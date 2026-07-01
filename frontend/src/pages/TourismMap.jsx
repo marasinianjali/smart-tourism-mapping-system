@@ -9,7 +9,7 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import Layout from "../components/Layout";
 import { useState, useEffect } from "react";
 import api from "../api/axios";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import PlacePopup from "../components/PlacePopup";
 import DistrictLayer from "../components/DistrictLayer";
 import HeatmapLayer from "../components/HeatmapLayer";
@@ -18,6 +18,7 @@ function TourismMap() {
   const [places, setPlaces] = useState([]);
   const [startPlace, setStartPlace] = useState(null);
   const [endPlace, setEndPlace] = useState(null);
+  const navigate = useNavigate();
 
   const role = localStorage.getItem("role");
 
@@ -67,8 +68,7 @@ function TourismMap() {
     }
 
   };
-
-
+  
   return (
     <Layout>
       <h1 className="text-3xl font-bold mb-6">
@@ -100,7 +100,12 @@ function TourismMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <HeatmapLayer places={visiblePlaces} />
-        <DistrictLayer places={visiblePlaces} />
+        <DistrictLayer
+          places={visiblePlaces}
+          onDistrictClick={(district) =>
+            navigate(`/districts/${district}`)
+          }
+        />
         {startPlace && endPlace && (
           <Polyline
             pathOptions={{
