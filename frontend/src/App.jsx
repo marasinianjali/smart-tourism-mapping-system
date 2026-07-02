@@ -16,6 +16,8 @@ import CreatePlace from "./pages/CreatePlace";
 import EditPlace from "./pages/EditPlace";
 import Districts from "./pages/Districts";
 import DistrictDetail from "./pages/DistrictDetail";
+import Categories from "./pages/Categories";
+import CategoryDetail from "./pages/CategoryDetail";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -24,34 +26,16 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        <Route path="/" element={<Home />} />
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/places"
-          element={<Places />}
-        />
-        <Route
-          path="/explore"
-          element={<Explore />}
-        />
+        <Route path="/places" element={<Places />} />
+        <Route path="/explore" element={<Explore />} />
 
-        <Route
-          path="/places/:id"
-          element={<PlaceDetail />}
-        />
+        <Route path="/places/:id" element={<PlaceDetail />} />
 
-        <Route
-          path="/profile"
-          element={<Profile />}
-        />
+        <Route path="/profile" element={<Profile />} />
 
         <Route
           path="/map"
@@ -61,16 +45,17 @@ function App() {
         <Route
           path="/dashboard"
           element={<Dashboard />}
-        /> 
+        />
 
         <Route
           path="/districts"
           element={<Districts />}
         />
-        <Route 
-          path="/districts/:districtName" 
-          element={<DistrictDetail />} 
-        />
+        <Route
+          path="/districts/:districtName"
+          element={<DistrictDetail />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/categories/:categoryName" element={<CategoryDetail />} />
 
         <Route
           path="/create-place"
@@ -100,7 +85,7 @@ function App() {
           }
         />
 
-       
+
 
       </Routes>
     </BrowserRouter>
