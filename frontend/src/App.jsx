@@ -18,6 +18,8 @@ import Districts from "./pages/Districts";
 import DistrictDetail from "./pages/DistrictDetail";
 import Categories from "./pages/Categories";
 import CategoryDetail from "./pages/CategoryDetail";
+import Provinces from "./pages/Provinces";
+import ProvinceDetail from "./pages/ProvinceDetail";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -56,6 +58,15 @@ function App() {
           element={<DistrictDetail />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/categories/:categoryName" element={<CategoryDetail />} />
+        <Route
+          path="/provinces"
+          element={<Provinces />}
+        />
+
+        <Route
+          path="/provinces/:provinceName"
+          element={<ProvinceDetail />}
+        />
 
         <Route
           path="/create-place"
