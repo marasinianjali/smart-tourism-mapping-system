@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 function HeroSection() {
     return (
         <section
-            className="relative min-h-screen bg-cover bg-center"
+            className="relative min-h-screen bg-red-500"
             style={{
                 backgroundImage:
-                    "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600')",
+                    "url('/images/boudha.webp')",
+                    
             }}
         >
             {/* Dark Overlay */}
@@ -22,11 +23,11 @@ function HeroSection() {
                     </span>
                 </h1>
 
-                <p className="mt-8 max-w-3xl text-lg md:text-xl text-gray-200 leading-8">
+                <p className="mt-10 max-w-3xl text-lg md:text-xl text-black-200 leading-8">
                     Journey through majestic Himalayas,
-                    ancient temples,
+                    ancient temples, <br/>
                     breathtaking lakes,
-                    vibrant culture,
+                    vibrant culture,<br/>
                     and unforgettable adventures waiting in every corner of Nepal.
                 </p>
 
