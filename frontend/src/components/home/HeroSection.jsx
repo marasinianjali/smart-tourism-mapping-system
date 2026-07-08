@@ -7,7 +7,7 @@ function HeroSection() {
             style={{
                 backgroundImage:
                     "url('/images/boudha.webp')",
-                    
+
             }}
         >
             {/* Dark Overlay */}
@@ -23,11 +23,11 @@ function HeroSection() {
                     </span>
                 </h1>
 
-                <p className="mt-10 max-w-3xl text-lg md:text-xl text-black-200 leading-8">
+                <p className="mt-10 max-w-3xl text-lg md:text-xl text-gray-200 leading-8">
                     Journey through majestic Himalayas,
-                    ancient temples, <br/>
+                    ancient temples, <br />
                     breathtaking lakes,
-                    vibrant culture,<br/>
+                    vibrant culture,<br />
                     and unforgettable adventures waiting in every corner of Nepal.
                 </p>
 
@@ -35,18 +35,34 @@ function HeroSection() {
                 <div className="mt-10 w-full max-w-xl">
                     <input
                         type="text"
-                        placeholder="Search destinations..."
+                        placeholder="🔍 Search destinations..."
                         className="
-                            w-full
-                            rounded-full
-                            px-6
-                            py-4
-                            text-gray-800
-                            shadow-xl
-                            outline-none
-                            focus:ring-4
-                            focus:ring-green-400
-                        "
+            w-full
+            rounded-full
+
+            px-6
+            py-4
+
+            bg-white/20
+            backdrop-blur-md
+
+            border-2
+            border-green-400
+
+            text-white
+            placeholder:text-gray-200
+
+            shadow-xl
+
+            outline-none
+
+            focus:border-green-500
+            focus:ring-4
+            focus:ring-green-300/50
+
+            transition
+            duration-300
+        "
                     />
                 </div>
 
@@ -91,12 +107,10 @@ function HeroSection() {
                 </div>
 
                 {/* Scroll Indicator */}
-                <div className="absolute bottom-10 animate-bounce">
-
-                    <p className="text-white text-4xl">
-                        ↓
-                    </p>
-
+                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+                    <div className="w-7 h-12 border-2 border-white rounded-full flex justify-center">
+                        <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+                    </div>
                 </div>
 
             </div>

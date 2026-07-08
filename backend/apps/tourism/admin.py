@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, District, TouristPlace
+from .models import Category, District, TouristPlace, TouristPlaceImage
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -20,3 +20,8 @@ class TouristPlaceAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
     list_filter = ('category', 'district', 'is_active', 'is_featured')
 
+@admin.register(TouristPlaceImage)
+class TouristPlaceImageAdmin(admin.ModelAdmin):
+    list_display = ('id',  'image', 'caption', 'is_primary')
+    search_fields = ('caption',)
+    list_filter = ('is_primary',)

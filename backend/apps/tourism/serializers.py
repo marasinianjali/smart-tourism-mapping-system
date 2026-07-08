@@ -11,6 +11,16 @@ class DistrictSerializer(serializers.ModelSerializer):
         model = District
         fields = "__all__"
 
+class TouristPlaceImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TouristPlaceImage
+        fields = [
+            "id",
+            "image",
+            "caption",
+            "is_primary",
+        ]
+
 class TouristPlaceSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(
         source="category.name", read_only=True
@@ -27,13 +37,26 @@ class TouristPlaceSerializer(serializers.ModelSerializer):
     approved_by_username = serializers.CharField(
         source="approved_by.full_name", read_only=True
     )
+    images = TouristPlaceImageSerializer(
+        many=True,
+        read_only=True,
+    )
+    primary_image = serializers.SerializerMethodField()
 
     class Meta:
         model = TouristPlace
         fields = "__all__"
 
-class TouristPlaceImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TouristPlaceImage
-        fields = "__all__"
-        read_only_fields = ["id"]
+    def get_primary_image(self, obj):
+        image = obj.images.filter(is_primary=True).first()
+
+        if image:
+            return image.image.url
+
+        image = obj.images.first()
+
+        if image:
+            return image.image.url
+
+        return None
+
