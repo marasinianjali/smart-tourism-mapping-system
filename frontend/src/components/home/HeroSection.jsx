@@ -37,32 +37,10 @@ function HeroSection() {
                         type="text"
                         placeholder="🔍 Search destinations..."
                         className="
-            w-full
-            rounded-full
-
-            px-6
-            py-4
-
-            bg-white/20
-            backdrop-blur-md
-
-            border-2
-            border-green-400
-
-            text-white
-            placeholder:text-gray-200
-
-            shadow-xl
-
-            outline-none
-
-            focus:border-green-500
-            focus:ring-4
-            focus:ring-green-300/50
-
-            transition
-            duration-300
-        "
+                                w-full rounded-full px-6 py-4 bg-white/20 backdrop-blur-md border-2
+                                border-green-400 text-white placeholder:text-gray-200 shadow-xl
+                                outline-none focus:border-green-500 focus:ring-4 focus:ring-green-300/50
+                                transition duration-300 "
                     />
                 </div>
 

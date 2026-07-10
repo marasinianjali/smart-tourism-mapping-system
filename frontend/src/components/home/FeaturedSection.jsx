@@ -16,12 +16,13 @@ function FeaturedSection() {
                 (place) =>
                     place.status === "approved" &&
                     place.is_featured
-            );
+            ).slice(0, 6);
 
             setFeaturedPlaces(featured);
         } catch (error) {
             console.error(error);
         }
+        console.log(featuredPlaces);
     };
     return (
         <div>
@@ -44,36 +45,30 @@ function FeaturedSection() {
 
                         <div
                             key={place.id}
-                            className="
-                group
-                bg-white
-                rounded-2xl
-                overflow-hidden
-                shadow-md
-                hover:shadow-2xl
-                transition-all
-                duration-300
-            "
-                        >
+                            className=" group bg-white rounded-2xl overflow-hidden shadow-md
+                                hover:shadow-2xl transition-all duration-300 ">
 
                             <img
-                                src={`http://127.0.0.1:8000${place.primary_image}`}
+                                src={
+                                    place.primary_image
+                                        ? `http://127.0.0.1:8000${place.primary_image}`
+                                        : "/images/nepal1.webp"
+                                }
                                 alt={place.name}
-                                className="
-                    h-64
-                    w-full
-                    object-cover
-                    group-hover:scale-105
-                    transition-transform
-                    duration-500
-                "
-                            />
+                                className=" h-64 w-full object-cover group-hover:scale-105
+                                    transition-transform duration-500 "/>
 
                             <div className="p-6">
 
-                                <span className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full">
-                                    {place.category_name}
-                                </span>
+                                <div className="absolute top-4 left-4">
+
+                                    <span className=" bg-white/90 backdrop-blur text-green-700
+                                        px-3 py-1 rounded-full text-sm font-medium
+                                    ">
+                                        {place.category_name}
+                                    </span>
+
+                                </div>
 
                                 <h3 className="text-2xl font-bold mt-4">
                                     {place.name}
@@ -83,21 +78,15 @@ function FeaturedSection() {
                                     {place.description}
                                 </p>
 
-                                <p className="mt-4 text-gray-500">
+                                <p className=" flex items-center gap-2 text-sm text-gray-500 ">
                                     📍 {place.district_name}
                                 </p>
 
                                 <Link
                                     to={`/places/${place.id}`}
-                                    className="
-                        inline-block
-                        mt-6
-                        text-green-600
-                        font-semibold
-                        hover:text-green-800
-                    "
-                                >
-                                    Explore →
+                                    className=" mt-6 inline-flex items-center gap-2 font-semibold 
+                                    text-green-600 hover:text-green-700 transition " >
+                                      View Details →
                                 </Link>
 
                             </div>
