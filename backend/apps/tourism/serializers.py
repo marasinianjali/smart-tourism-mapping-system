@@ -7,6 +7,12 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class DistrictSerializer(serializers.ModelSerializer):
+
+    province_display = serializers.CharField(
+        source="get_province_display",
+        read_only=True
+    )
+
     class Meta:
         model = District
         fields = "__all__"

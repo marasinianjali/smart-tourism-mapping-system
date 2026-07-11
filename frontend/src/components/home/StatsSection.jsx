@@ -1,53 +1,119 @@
+import { useEffect, useState } from "react";
+import api from "../../api/axios";
+
 function StatsSection() {
-    return(
-    <div>
-         {/* Stats */}
 
-      <section className="py-20 bg-gray-100">
+    const [stats, setStats] = useState({
+        places: 0,
+        districts: 0,
+        categories: 0,
+    });
 
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-center">
+    useEffect(() => {
+        fetchStats();
+    }, []);
 
-          <div>
+    const fetchStats = async () => {
 
-            <h2 className="text-5xl font-bold text-blue-700">
-              21+
-            </h2>
+        try {
 
-            <p className="mt-2 text-gray-600">
-              Tourist Places
-            </p>
+            const [
+                placesResponse,
+                districtsResponse,
+                categoriesResponse,
+            ] = await Promise.all([
+                api.get("tourism/places/"),
+                api.get("tourism/districts/"),
+                api.get("tourism/categories/"),
+            ]);
 
-          </div>
+            const approvedPlaces =
+                placesResponse.data.results.filter(
+                    (place) => place.status === "approved"
+                ).length;
 
-          <div>
+            setStats({
+                places: approvedPlaces,
+                districts: districtsResponse.data.count,
+                categories: categoriesResponse.data.count,
+            });
 
-            <h2 className="text-5xl font-bold text-green-700">
-              14
-            </h2>
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-            <p className="mt-2 text-gray-600">
-              Districts
-            </p>
+    return (
 
-          </div>
+        <section className="bg-gradient-to-r from-green-50 to-blue-50 py-24">
 
-          <div>
+            <div className="max-w-7xl mx-auto px-6">
 
-            <h2 className="text-5xl font-bold text-orange-600">
-              3
-            </h2>
+                <h2 className="text-4xl font-bold text-center">
+                    Nepal at a Glance
+                </h2>
 
-            <p className="mt-2 text-gray-600">
-              Categories
-            </p>
+                <p className="text-gray-500 text-center mt-4 mb-14">
+                    Discover Nepal through verified tourism information.
+                </p>
 
-          </div>
+                <div className="grid md:grid-cols-3 gap-8">
 
-        </div>
+                    <div className="bg-white rounded-2xl shadow-md p-10 text-center hover:shadow-xl transition">
 
-      </section>
+                        <div className="text-5xl mb-5">
+                            📍
+                        </div>
 
-    </div>
+                        <h3 className="text-5xl font-extrabold text-blue-600">
+                            {stats.places}+
+                        </h3>
+
+                        <p className="mt-4 text-lg text-gray-600">
+                            Tourist Places
+                        </p>
+
+                    </div>
+
+                    <div className="bg-white rounded-2xl shadow-md p-10 text-center hover:shadow-xl transition">
+
+                        <div className="text-5xl mb-5">
+                            🏞️
+                        </div>
+
+                        <h3 className="text-5xl font-extrabold text-green-600">
+                            {stats.districts}
+                        </h3>
+
+                        <p className="mt-4 text-lg text-gray-600">
+                            Districts Covered
+                        </p>
+
+                    </div>
+
+                    <div className="bg-white rounded-2xl shadow-md p-10 text-center hover:shadow-xl transition">
+
+                        <div className="text-5xl mb-5">
+                            🗂️
+                        </div>
+
+                        <h3 className="text-5xl font-extrabold text-orange-500">
+                            {stats.categories}
+                        </h3>
+
+                        <p className="mt-4 text-lg text-gray-600">
+                            Categories
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
     );
 }
+
 export default StatsSection;

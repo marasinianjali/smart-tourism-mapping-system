@@ -14,20 +14,9 @@ function PlaceDetail() {
     }, []);
     const fetchPlace = async () => {
         try {
-            const token = localStorage.getItem("access");
-
-            const config = token
-                ? {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-                : {};
             const response = await api.get(
-                `tourism/places/${id}/`,
-                config
+                `tourism/places/${id}/`
             );
-                   
 
             setPlace(response.data);
 
@@ -43,12 +32,12 @@ function PlaceDetail() {
     }
 
     return (
-       
-            <Layout>
-                <h1 className="text-3xl font-bold mb-6">
-                    Place Details
-                </h1> 
-           
+
+        <Layout>
+            <h1 className="text-3xl font-bold mb-6">
+                Place Details
+            </h1>
+
 
             <div className="bg-white shadow-md rounded-lg p-4 
                             mb-4 hover:shadow-xl transition cursor-pointer">
@@ -85,8 +74,8 @@ function PlaceDetail() {
 
             </div>
         </Layout>
-       
-       
+
+
     );
 }
 
