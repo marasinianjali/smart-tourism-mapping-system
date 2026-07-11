@@ -15,28 +15,15 @@ function ProvinceDetail() {
 
   const fetchPlaces = async () => {
     try {
-      const token = localStorage.getItem("access");
 
-      const config = token
-        ? {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        : {};
+      const response = await api.get("tourism/places/");
 
-      const response = await api.get(
-        "tourism/places/",
-        config
+      const approvedPlaces = response.data.results.filter(
+        (place) =>
+          place.status === "approved" &&
+          place.province_name.toUpperCase() ===
+          provinceName.toUpperCase()
       );
-
-      const approvedPlaces =
-        response.data.results.filter(
-          (place) =>
-            place.status === "approved" &&
-            place.province_name.toUpperCase() ===
-              provinceName.toUpperCase()
-        );
 
       setPlaces(approvedPlaces);
 
@@ -47,30 +34,32 @@ function ProvinceDetail() {
     }
   };
 
-  return (
-    <div className="max-w-7xl mx-auto p-6">
 
-      <h1 className="text-4xl font-bold mb-6">
-        {provinceName}
-      </h1>
 
-      <p className="text-gray-500 mb-8">
-        {places.length} Tourist Places
-      </p>
+return (
+  <div className="max-w-7xl mx-auto p-6">
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        places.map((place) => (
-          <PublicPlaceCard
-            key={place.id}
-            place={place}
-          />
-        ))
-      )}
+    <h1 className="text-4xl font-bold mb-6">
+      {provinceName}
+    </h1>
 
-    </div>
-  );
+    <p className="text-gray-500 mb-8">
+      {places.length} Tourist Places
+    </p>
+
+    {loading ? (
+      <p>Loading...</p>
+    ) : (
+      places.map((place) => (
+        <PublicPlaceCard
+          key={place.id}
+          place={place}
+        />
+      ))
+    )}
+
+  </div>
+);
 }
 
 export default ProvinceDetail;

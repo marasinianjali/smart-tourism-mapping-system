@@ -22,7 +22,6 @@ function FeaturedSection() {
         } catch (error) {
             console.error(error);
         }
-        console.log(featuredPlaces);
     };
     return (
         <div>
@@ -45,7 +44,7 @@ function FeaturedSection() {
 
                         <div
                             key={place.id}
-                            className=" group bg-white rounded-2xl overflow-hidden shadow-md
+                            className=" group relative bg-white rounded-2xl overflow-hidden shadow-md
                                 hover:shadow-2xl transition-all duration-300 ">
 
                             <img
