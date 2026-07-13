@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import api from "../api/axios";
@@ -32,50 +32,143 @@ function PlaceDetail() {
     }
 
     return (
-
         <Layout>
-            <h1 className="text-3xl font-bold mb-6">
-                Place Details
-            </h1>
 
+            <div className="max-w-5xl mx-auto py-8">
 
-            <div className="bg-white shadow-md rounded-lg p-4 
-                            mb-4 hover:shadow-xl transition cursor-pointer">
+                {/* Back */}
 
-                <h1 className="text-4xl font-bold mb-4">
-                    {place.name}
-                </h1>
+                <Link
+                    to="/places"
+                    className="
+                    inline-flex
+                    items-center
+                    text-green-600
+                    hover:text-green-700
+                    font-medium
+                    mb-6
+                "
+                >
+                    ← Back to Places
+                </Link>
 
-                <p className="text-gray-600 mb-6">
-                    {place.description}
-                </p>
+                {/* Card */}
 
-                <div className="space-y-2">
-                    <p>
-                        <strong>Category:</strong> {place.category_name}
-                    </p>
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
 
-                    <p>
-                        <strong>District:</strong> {place.district_name}
-                    </p>
+                    {/* Image */}
 
-                    <p>
-                        <strong>Province:</strong> {place.province_name}
-                    </p>
+                    <img
+                        src={
+                            place.primary_image
+                                ? `http://127.0.0.1:8000${place.primary_image}`
+                                : "/images/nepal1.webp"
+                        }
+                        alt={place.name}
+                        className="w-full h-96 object-cover"
+                    />
 
-                    <p>
-                        <strong>Latitude:</strong> {place.latitude}
-                    </p>
+                    <div className="p-8">
 
-                    <p>
-                        <strong>Longitude:</strong> {place.longitude}
-                    </p>
+                        {/* Title */}
+
+                        <div className="flex justify-between items-start">
+
+                            <div>
+
+                                <h1 className="text-4xl font-bold">
+                                    {place.name}
+                                </h1>
+
+                                <p className="text-gray-500 mt-2">
+                                    {place.category_name}
+                                </p>
+
+                            </div>
+
+                            <span
+                                className={`
+                                px-4
+                                py-2
+                                rounded-full
+                                text-sm
+                                font-semibold
+                                ${place.status === "approved"
+                                        ? "bg-green-100 text-green-700"
+                                        : place.status === "pending"
+                                            ? "bg-yellow-100 text-yellow-700"
+                                            : "bg-red-100 text-red-700"
+                                    }
+                            `}
+                            >
+                                {place.status}
+                            </span>
+
+                        </div>
+
+                        {/* Description */}
+
+                        <div className="mt-8">
+
+                            <h2 className="text-xl font-bold mb-3">
+                                Description
+                            </h2>
+
+                            <p className="text-gray-600 leading-8">
+                                {place.description}
+                            </p>
+
+                        </div>
+
+                        {/* Information */}
+
+                        <div className="grid md:grid-cols-2 gap-8 mt-10">
+
+                            <div className="space-y-4">
+
+                                <h2 className="text-xl font-bold">
+                                    Information
+                                </h2>
+
+                                <p><strong>📂 Category:</strong> {place.category_name}</p>
+
+                                <p><strong>📍 District:</strong> {place.district_name}</p>
+
+                                <p><strong>🏔 Province:</strong> {place.province_name}</p>
+
+                            </div>
+
+                            <div className="space-y-4">
+
+                                <h2 className="text-xl font-bold">
+                                    Coordinates
+                                </h2>
+
+                                <p><strong>🌍 Latitude:</strong> {place.latitude}</p>
+
+                                <p><strong>🌍 Longitude:</strong> {place.longitude}</p>
+
+                                <p>
+                                    <strong>⭐ Featured:</strong>{" "}
+                                    {place.is_featured ? "Yes" : "No"}
+                                </p>
+
+                                <p>
+                                    <strong>✅ Active:</strong>{" "}
+                                    {place.is_active ? "Yes" : "No"}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
+
         </Layout>
-
-
     );
 }
 

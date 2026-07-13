@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
+import Layout from "../components/Layout";
 import PlaceCard from "../components/PlaceCard";
 import SearchBar from "../components/SearchBar";
 import CategoryFilter from "../components/CategoryFilter";
@@ -10,7 +11,6 @@ function Places() {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("SEARCH TERM:", searchTerm);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -33,8 +33,6 @@ function Places() {
           },
         }
       );
-
-      console.log("RESPONSE:", response.data);
 
       setPlaces(response.data.results);
 
@@ -80,15 +78,20 @@ function Places() {
       )
       : filteredPlaces;
 
-  console.log("FIRST PLACE:", places[0]);
   return (
-    
+    <Layout>
     <div className="max-w-5xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
 
-        <h1 className="text-3xl font-bold">
-          Tourist Places
-        </h1>
+        <div>
+          <h1 className="text-4xl font-bold text-gray-800">
+            Tourist Places
+          </h1>
+
+          <p className="text-gray-500 mt-2">
+            Manage all tourism destinations across Nepal.
+          </p>
+        </div>
 
         {[
           "MUNICIPALITY_ADMIN",
@@ -98,26 +101,34 @@ function Places() {
         ) && (
             <Link
               to="/create-place"
-              className="bg-green-600 text-white px-4 py-2 rounded"
+              className=" bg-green-600 hover:bg-green-700 text-white font-semibold px-5
+                py-3 rounded-xl shadow-md transition "
             >
               + Add Place
             </Link>
           )}
 
       </div>
+      <div className=" bg-white rounded-2xl shadow p-6 space-y-5 mb-8 ">
 
-      <SearchBar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-      <CategoryFilter
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
-      <ProvinceFilter
-        selectedProvince={selectedProvince}
-        setSelectedProvince={setSelectedProvince}
-      />
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+
+        <div className="grid md:grid-cols-3 gap-4">
+
+          <CategoryFilter
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+          <ProvinceFilter
+            selectedProvince={selectedProvince}
+            setSelectedProvince={setSelectedProvince}
+          />        
+        </div>
+      </div>
+
       {role !== "PUBLIC_USER" && (
         <select
           value={selectedStatus}
@@ -159,6 +170,7 @@ function Places() {
         ))
       )}
     </div>
+</Layout>
   );
 }
 

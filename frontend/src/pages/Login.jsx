@@ -21,7 +21,7 @@ function Login() {
       const profile = await getProfile();
       localStorage.setItem("role", profile.role);
 
-      navigate("/places"); 
+      navigate("/places");
 
     } catch (error) {
       console.log(error.response?.data);
@@ -29,22 +29,79 @@ function Login() {
     }
   };
   return (
-    <div>
-      <h1>Login</h1>
-      <input type="email"
-        placeholder="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
 
-      <input type="password"
-        placeholder="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
 
-      <button onClick={handleLogin}>Login</button>
+      <div className="bg-white rounded-2xl shadow-xl p-10 w-full max-w-md">
+
+        <h1 className="text-3xl font-bold text-center text-blue-700">
+          Smart Tourism
+        </h1>
+
+        <p className="text-center text-gray-500 mt-2 mb-8">
+          Admin Login
+        </p>
+
+        <div className="space-y-5">
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="
+                            w-full
+                            border
+                            border-gray-300
+                            rounded-lg
+                            px-4
+                            py-3
+                            outline-none
+                            focus:ring-2
+                            focus:ring-green-500
+                        "
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="
+                            w-full
+                            border
+                            border-gray-300
+                            rounded-lg
+                            px-4
+                            py-3
+                            outline-none
+                            focus:ring-2
+                            focus:ring-green-500
+                        "
+          />
+
+          <button
+            onClick={handleLogin}
+            className="
+                            w-full
+                            bg-green-600
+                            hover:bg-green-700
+                            text-white
+                            py-3
+                            rounded-lg
+                            font-semibold
+                            transition
+                        "
+          >
+            Login
+          </button>
+
+        </div>
+
+      </div>
+
     </div>
+
   );
 }
 

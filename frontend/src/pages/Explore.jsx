@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import api from "../api/axios";
 import SearchBar from "../components/SearchBar";
 import CategoryFilter from "../components/CategoryFilter";
@@ -7,9 +8,13 @@ import PublicPlaceCard from "../components/PublicPlaceCard";
 
 
 function Explore() {
+    const [searchParams] = useSearchParams();
+    const initialSearch =
+        searchParams.get("search") || "";
     const [places, setPlaces] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] =
+        useState(initialSearch);
     console.log("SEARCH TERM:", searchTerm);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedProvince, setSelectedProvince] = useState("");
@@ -17,6 +22,9 @@ function Explore() {
     useEffect(() => {
         fetchPlaces();
     }, []);
+    useEffect(() => {
+        setSearchTerm(initialSearch);
+    }, [initialSearch]);
     useEffect(() => {
         console.log("PLACES STATE:", places);
     }, [places]);
@@ -81,12 +89,32 @@ function Explore() {
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                filteredPlaces.map((place) => (
-                    <PublicPlaceCard
-                        key={place.id}
-                        place={place}
-                    />
-                ))
+                filteredPlaces.length > 0 ? (
+
+    filteredPlaces.map((place) => (
+
+        <PublicPlaceCard
+            key={place.id}
+            place={place}
+        />
+
+    ))
+
+) : (
+
+    <div className="text-center py-20">
+
+        <h2 className="text-3xl font-bold">
+            No places found 😔
+        </h2>
+
+        <p className="mt-3 text-gray-500">
+            Try another destination, category, or province.
+        </p>
+
+    </div>
+
+)
             )}
         </div>
     );
