@@ -1,6 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function HeroSection() {
+    const navigate = useNavigate();
+    const [search, setSearch] = useState("");
+
+    const handleSearch = () => {
+        const query = search.trim();
+
+        if (query.length < 2) {
+            return;
+        }
+
+        navigate(`/explore?search=${encodeURIComponent(query)}`);
+    };
     return (
         <section
             className="relative min-h-screen bg-red-500"
@@ -10,10 +23,9 @@ function HeroSection() {
 
             }}
         >
-            {/* Dark Overlay */}
+
             <div className="absolute inset-0 bg-black/60"></div>
 
-            {/* Content */}
             <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-6">
 
                 <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight">
@@ -31,20 +43,25 @@ function HeroSection() {
                     and unforgettable adventures waiting in every corner of Nepal.
                 </p>
 
-                {/* Search Bar (UI Only) */}
                 <div className="mt-10 w-full max-w-xl">
                     <input
                         type="text"
                         placeholder="🔍 Search destinations..."
-                        className="
-                                w-full rounded-full px-6 py-4 bg-white/20 backdrop-blur-md border-2
-                                border-green-400 text-white placeholder:text-gray-200 shadow-xl
-                                outline-none focus:border-green-500 focus:ring-4 focus:ring-green-300/50
-                                transition duration-300 "
-                    />
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        onKeyDown={(e) => {
+
+                            if (e.key === "Enter") {
+                                handleSearch();
+                            }
+
+                        }}
+                        className=" w-full rounded-full px-6 py-4 bg-white/20 backdrop-blur-md
+                            border-2 border-green-400 text-white placeholder:text-gray-200 shadow-xl
+                            outline-none focus:border-green-500 focus:ring-4 focus:ring-green-300/50
+                            transition duration-300 " />
                 </div>
 
-                {/* Buttons */}
                 <div className="mt-10 flex flex-wrap justify-center gap-6">
 
                     <Link
