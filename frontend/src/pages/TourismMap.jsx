@@ -52,9 +52,6 @@ function TourismMap() {
         "tourism/places/",
         config
       );
-      // console.log(response.data.results);
-      // console.log(response.data);
-
 
       setPlaces(response.data.results);
       console.log(

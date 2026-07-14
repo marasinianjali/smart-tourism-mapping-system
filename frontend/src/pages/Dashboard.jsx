@@ -1,6 +1,7 @@
 import Layout from "../components/Layout";
 import StatsCard from "../components/StatsCard";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/axios";
 import {
     PieChart,
@@ -184,55 +185,102 @@ function Dashboard() {
                 </div>
             </div>
             <div className="mt-10">
-                <h2 className="text-2xl font-bold mb-4">
+
+                <h2 className="text-2xl font-bold mb-6">
                     Places by Category
                 </h2>
 
-                <div className="bg-white rounded-lg shadow-md p-4 w-full">
-                    {Object.entries(categoryStats).map(
-                        ([category, count]) => (
-                            <div
-                                key={category}
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    gap: "5px",
-                                    padding: "12px 0",
-                                    margin: "0 10px",
+                <div className="bg-white rounded-2xl shadow-md p-6">
 
-                                }}
+                    {Object.entries(categoryStats).map(([category, count]) => (
+
+                        <div
+                            key={category}
+                            className="
+                    flex
+                    justify-between
+                    items-center
+                    py-4
+                    border-b
+                    last:border-none
+                "
+                        >
+
+                            <span className="font-medium text-gray-700">
+                                {category}
+                            </span>
+
+                            <span
+                                className="
+                        bg-green-100
+                        text-green-700
+                        px-3
+                        py-1
+                        rounded-full
+                        font-semibold
+                    "
                             >
-                                <span>{category}</span>
-                                <span>{count}</span>
-                            </div>
-                        )
-                    )}
+                                {count}
+                            </span>
+
+                        </div>
+
+                    ))}
+
                 </div>
+
             </div>
             <div className="mt-10">
-                <h2 className="text-2xl font-bold mb-4">
-                    Places by District
-                </h2>
+                <div className="flex justify-between items-center mb-4">
 
-                <div className="bg-white rounded-lg shadow-md p-4">
-                    {Object.entries(districtStats).map(
-                        ([district, count]) => (
+                    <h2 className="text-2xl font-bold">
+                        Top Districts
+                    </h2>
+
+                    <Link
+                        to="/districts"
+                        className="text-green-600 hover:text-green-700 font-medium"
+                    >
+                        View All →
+                    </Link>
+
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-md p-6">
+
+                    {Object.entries(districtStats)
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 10)
+                        .map(([district, count]) => (
+
                             <div
                                 key={district}
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    gap: "5px",
-                                    padding: "12px 0",
-                                    margin: "0 10px",
-
-                                }}
+                                className="mb-5"
                             >
-                                <span>{district}</span>
-                                <span>{count}</span>
+
+                                <div className="flex justify-between text-sm font-medium">
+
+                                    <span>{district}</span>
+
+                                    <span>{count}</span>
+
+                                </div>
+
+                                <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
+
+                                    <div
+                                        className="bg-green-500 h-3 rounded-full"
+                                        style={{
+                                            width: `${(count / Math.max(...Object.values(districtStats))) * 100}%`,
+                                        }}
+                                    />
+
+                                </div>
+
                             </div>
-                        )
-                    )}
+
+                        ))}
+
                 </div>
             </div>
             <div className="mt-10">
