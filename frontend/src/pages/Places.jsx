@@ -19,11 +19,9 @@ function Places() {
     fetchPlaces();
   }, []);
   useEffect(() => {
-    console.log("PLACES STATE:", places);
   }, [places]);
   const fetchPlaces = async () => {
     try {
-      console.log("TOKEN:", localStorage.getItem("access"));
 
       const response = await api.get(
         "tourism/places/",
