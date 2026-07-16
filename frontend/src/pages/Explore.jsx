@@ -4,6 +4,7 @@ import api from "../api/axios";
 import SearchBar from "../components/SearchBar";
 import CategoryFilter from "../components/CategoryFilter";
 import ProvinceFilter from "../components/ProvinceFilter";
+import SortFilter from "../components/SortFilter";
 import PublicPlaceCard from "../components/PublicPlaceCard";
 
 
@@ -13,11 +14,10 @@ function Explore() {
         searchParams.get("search") || "";
     const [places, setPlaces] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] =
-        useState(initialSearch);
-    console.log("SEARCH TERM:", searchTerm);
+    const [searchTerm, setSearchTerm] = useState(initialSearch);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedProvince, setSelectedProvince] = useState("");
+    const [selectedSort, setSelectedSort] = useState("newest");
 
     useEffect(() => {
         fetchPlaces();
@@ -43,10 +43,14 @@ function Explore() {
         }
     };
     const filteredPlaces = places.filter((place) => {
+        const search = searchTerm.toLowerCase();
+
         const matchesSearch =
-            place.name
-                .toLowerCase()
-                .includes(searchTerm.toLowerCase());
+            place.name.toLowerCase().includes(search) ||
+            place.description.toLowerCase().includes(search) ||
+            place.category_name.toLowerCase().includes(search) ||
+            place.district_name.toLowerCase().includes(search) ||
+            place.province_name.toLowerCase().includes(search);
 
         const matchesCategory =
             selectedCategory === "" ||
@@ -62,9 +66,41 @@ function Explore() {
             matchesProvince
         );
     });
+    const sortedPlaces = [...filteredPlaces];
+    if (selectedSort === "az") {
+        sortedPlaces.sort((a, b) =>
+            a.name.localeCompare(b.name)
+        );
+    }
 
+    if (selectedSort === "za") {
+        sortedPlaces.sort((a, b) =>
+            b.name.localeCompare(a.name)
+        );
+    }
 
-    console.log("FIRST PLACE:", places[0]);
+    if (selectedSort === "newest") {
+        sortedPlaces.sort(
+            (a, b) =>
+                new Date(b.created_at) -
+                new Date(a.created_at)
+        );
+    }
+
+    if (selectedSort === "oldest") {
+        sortedPlaces.sort(
+            (a, b) =>
+                new Date(a.created_at) -
+                new Date(b.created_at)
+        );
+    }
+    const clearFilters = () => {
+        setSearchTerm("");
+        setSelectedCategory("");
+        setSelectedProvince("");
+        setSelectedSort("newest");
+    };
+
     return (
         <div className="max-w-5xl mx-auto p-6">
             <div className="flex justify-between items-center mb-6">
@@ -74,47 +110,94 @@ function Explore() {
                 </h1>
             </div>
 
-            <SearchBar
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-            />
-            <CategoryFilter
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-            />
-            <ProvinceFilter
-                selectedProvince={selectedProvince}
-                setSelectedProvince={setSelectedProvince}
-            />
+            <div className="flex flex-col md:flex-row gap-4 mb-8">
+
+                <div className="flex-1">
+                    <SearchBar
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                    />
+                </div>
+
+                <CategoryFilter
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                />
+
+                <ProvinceFilter
+                    selectedProvince={selectedProvince}
+                    setSelectedProvince={setSelectedProvince}
+                />
+
+                <SortFilter
+                    selectedSort={selectedSort}
+                    setSelectedSort={setSelectedSort}
+                />
+
+            </div>
+            <div className="flex justify-between items-center mb-6">
+
+                <p className="text-gray-500">
+                    Showing <span className="font-semibold">{sortedPlaces.length}</span> places
+                </p>
+
+                <button
+                    onClick={clearFilters}
+                    className="
+            px-5
+            py-2
+            rounded-xl
+            border
+            border-gray-300
+            hover:bg-gray-100
+            transition
+        "
+                >
+                    Clear Filters
+                </button>
+
+            </div>
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                filteredPlaces.length > 0 ? (
+                sortedPlaces.length > 0 ? (
 
-    filteredPlaces.map((place) => (
+                    sortedPlaces.map((place) => (
 
-        <PublicPlaceCard
-            key={place.id}
-            place={place}
-        />
+                        <PublicPlaceCard
+                            key={place.id}
+                            place={place}
+                        />
 
-    ))
+                    ))
 
-) : (
+                ) : (
 
-    <div className="text-center py-20">
+                    <div className="text-center py-20">
 
-        <h2 className="text-3xl font-bold">
-            No places found 😔
-        </h2>
+                        <div className="text-6xl mb-6">
+                            🔍
+                        </div>
 
-        <p className="mt-3 text-gray-500">
-            Try another destination, category, or province.
-        </p>
+                        <h2 className="text-3xl font-bold">
+                            No places found
+                        </h2>
 
-    </div>
+                        <p className="mt-4 text-gray-500">
+                            Try changing your search or filters.
+                        </p>
 
-)
+                        <button
+                            onClick={clearFilters}
+                            className=" mt-8 bg-green-600 hover:bg-green-700 text-white 
+                                        px-6 py-3 rounded-xl transition "
+                        >
+                            Clear Filters
+                        </button>
+
+                    </div>
+
+                )
             )}
         </div>
     );

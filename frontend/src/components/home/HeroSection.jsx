@@ -16,7 +16,7 @@ function HeroSection() {
     };
     return (
         <section
-            className="relative min-h-screen bg-red-500"
+            className="relative min-h-screen bg-blue-500"
             style={{
                 backgroundImage:
                     "url('/images/boudha.webp')",
