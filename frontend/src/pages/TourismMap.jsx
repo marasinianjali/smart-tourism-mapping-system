@@ -99,9 +99,9 @@ function TourismMap() {
         <HeatmapLayer places={visiblePlaces} />
         <DistrictLayer
           places={visiblePlaces}
-          onDistrictClick={(district) =>
-            navigate(`/districts/${district}`)
-          }
+          // onDistrictClick={(district) =>
+          //   navigate(`/districts/${district}`)
+          // }
         />
         {startPlace && endPlace && (
           <Polyline

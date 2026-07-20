@@ -3,7 +3,7 @@ import { GeoJSON } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 
 
-function DistrictLayer({ places, onDistrictClick, }) {
+function DistrictLayer({ places }) {
     const [districts, setDistricts] = useState(null);
 
     useEffect(() => {
@@ -47,11 +47,7 @@ function DistrictLayer({ places, onDistrictClick, }) {
             Tourist Places:
             ${districtPlaces.length}
         `);
-        layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlight,
-            click: () => onDistrictClick(districtName),
-        });
+      
     };
     const districtStyle = {
         color: "blue",

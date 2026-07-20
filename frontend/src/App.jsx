@@ -20,6 +20,8 @@ import Categories from "./pages/Categories";
 import CategoryDetail from "./pages/CategoryDetail";
 import Provinces from "./pages/Provinces";
 import ProvinceDetail from "./pages/ProvinceDetail";
+import PublicMap from "./pages/PublicMap";
+import PublicPlaceDetail from "./pages/PublicPlaceDetail";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -32,16 +34,37 @@ function App() {
 
         <Route path="/login" element={<Login />} />
 
-        <Route path="/places" element={<Places />} />
-        <Route path="/explore" element={<Explore />} />
-
-        <Route path="/places/:id" element={<PlaceDetail />} />
-
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/places"
+          element={<Places />}
+        />
+        <Route
+          path="/explore"
+          element={<Explore />}
+        />
 
         <Route
-          path="/map"
+          path="/admin/places/:id"
+          element={<PlaceDetail />}
+        />
+
+        <Route
+          path="/profile"
+          element={<Profile />}
+        />
+
+        <Route
+          path="/admin/map"
           element={<TourismMap />}
+        />
+        <Route
+          path="/map"
+          element={<PublicMap />}
+        />
+
+        <Route
+          path="/places/:id"
+          element={<PublicPlaceDetail />}
         />
 
         <Route
@@ -53,11 +76,20 @@ function App() {
           path="/districts"
           element={<Districts />}
         />
+
         <Route
           path="/districts/:districtName"
           element={<DistrictDetail />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/categories/:categoryName" element={<CategoryDetail />} />
+
+        <Route
+          path="/categories"
+          element={<Categories />}
+        />
+        <Route
+          path="/categories/:categoryName"
+          element={<CategoryDetail />}
+        />
+
         <Route
           path="/provinces"
           element={<Provinces />}

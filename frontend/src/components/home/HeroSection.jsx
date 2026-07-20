@@ -65,7 +65,7 @@ function HeroSection() {
                 <div className="mt-10 flex flex-wrap justify-center gap-6">
 
                     <Link
-                        to="/places"
+                        to="/explore"
                         className="
                             bg-green-500
                             hover:bg-green-600

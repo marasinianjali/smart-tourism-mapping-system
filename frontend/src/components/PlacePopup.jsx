@@ -52,36 +52,43 @@ function PlacePopup({ place, places }) {
         a.distance - b.distance
     )
     .slice(0, 3);
-  
-  return (
-    <div className="min-w-[200px]">
 
-      <h3 className="font-bold text-lg mb-2">
+  return (
+    <div className="w-64">
+      <img
+        src={
+          place.primary_image
+            ? `http://127.0.0.1:8000${place.primary_image}`
+            : "/images/nepal1.webp"
+        }
+        alt={place.name}
+        className="w-full h-36 object-cover rounded-xl"
+      />
+
+      <h3 className="text-xl font-bold mt-3">
         {place.name}
       </h3>
 
       <p>
-        <strong>Category:</strong>
-        {" "}
-        {place.category_name}
+        <span
+          className=" inline-block mt-3 bg-green-100 text-green-700
+            px-3 py-1 rounded-full text-sm font-medium " >
+          {place.category_name}
+        </span>
       </p>
-
-      <p>
-        <strong>District:</strong>
-        {" "}
-        {place.district_name}
+      <p className="text-gray-600 mt-2">
+        📍 {place.district_name}
       </p>
-
-      <p>
-        <strong>Province:</strong>
-        {" "}
-        {place.province_name}
+      <p className="text-gray-600">
+        🏔 {place.province_name}
       </p>
       <div className="mt-3">
-        <strong>Nearby Places:</strong>
+        <h4 className="mt-5 font-semibold">
+          Nearby Places
+        </h4>
 
         {nearbyPlaces.length > 0 ? (
-          <ul className="list-disc ml-5 mt-1">
+          <ul className="mt-2 space-y-1 text-sm text-gray-600">
             {nearbyPlaces.map((nearby) => (
               <li key={nearby.id}>
                 {nearby.name}
@@ -100,9 +107,9 @@ function PlacePopup({ place, places }) {
       </div>
       <Link
         to={`/places/${place.id}`}
-        className="inline-block mt-3 text-blue-600 hover:underline"
-      >
-        View Details →
+        className=" mt-5 block w-full text-center bg-green-600 hover:bg-green-700
+                    !text-white py-2 rounded-lg font-semibold no-underline transition " >
+        View Details
       </Link>
 
     </div>
