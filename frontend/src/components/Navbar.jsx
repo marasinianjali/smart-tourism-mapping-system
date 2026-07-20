@@ -34,7 +34,7 @@ function Navbar() {
           </Link>
 
           <Link
-            to="/map"
+            to="/admin/map"
             className="hover:text-blue-600 transition font-medium"
           >
             Map

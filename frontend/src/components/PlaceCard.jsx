@@ -63,7 +63,7 @@ function PlaceCard({ place, onPlaceUpdated, }) {
     }
   };
   return (
-    <Link to={`/places/${place.id}`}>
+    <Link to={`/admin/places/${place.id}`}>
 
       <div className="border rounded-lg p-4 mb-4 shadow">
         <h2 className="text-xl font-bold">
