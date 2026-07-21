@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, District, TouristPlace, TouristPlaceImage
+from .models import Category, District, TouristPlace, TouristPlaceImage, Review
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -25,3 +25,9 @@ class TouristPlaceImageAdmin(admin.ModelAdmin):
     list_display = ('id',  'image', 'caption', 'is_primary')
     search_fields = ('caption',)
     list_filter = ('is_primary',)
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('id', 'place', 'user', 'rating', 'comment', 'created_at', 'updated_at')
+    search_fields = ('comment',)
+    list_filter = ('rating', 'created_at', 'updated_at')

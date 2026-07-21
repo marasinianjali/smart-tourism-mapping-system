@@ -43,3 +43,26 @@ class TouristPlacePermission(BasePermission):
                 "DATA_ENTRY_USER",
             ]
         )
+
+class ReviewPermission(BasePermission):
+
+    def has_permission(self, request, view):
+
+        if request.method in SAFE_METHODS:
+            return True
+
+        return (
+            request.user.is_authenticated
+            and request.user.role in [
+                "SUPER_ADMIN",
+                "MUNICIPALITY_ADMIN",
+                "DATA_ENTRY_USER",
+            ]
+        )
+
+    def has_object_permission(self, request, view, obj):
+
+        if request.method in SAFE_METHODS:
+            return True
+
+        return obj.user == request.user

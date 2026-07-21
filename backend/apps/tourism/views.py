@@ -9,10 +9,12 @@ from rest_framework.response import Response
 from rest_framework import status 
 from django.utils import timezone
 
-from .models import Category, District, TouristPlace, TouristPlaceImage
+from .models import (Category, District, TouristPlace, TouristPlaceImage, 
+                     Review)
 from .serializers import( CategorySerializer, DistrictSerializer, 
-                         TouristPlaceSerializer, TouristPlaceImageSerializer)
-from .permissions import TouristPlacePermission
+                         TouristPlaceSerializer, TouristPlaceImageSerializer,
+                           ReviewSerializer)
+from .permissions import TouristPlacePermission, ReviewPermission
 from apps.accounts.permissions import IsMunicipalityAdminOrSuperAdmin
     
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -114,3 +116,18 @@ class TouristPlaceImageViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [ReviewPermission]
+
+    def get_queryset(self):
+        queryset = Review.objects.all()
+
+        place_id = self.request.query_params.get("place")
+
+        if place_id:
+            queryset = queryset.filter(place_id=place_id)
+        return queryset
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
