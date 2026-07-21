@@ -1,6 +1,9 @@
 from django.db import models
 from apps.common.models import TimeStampedModel
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
+from apps.common.models import TimeStampedModel
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -8,7 +11,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-
 
 class District(models.Model):
     class Province(models.TextChoices):
@@ -68,3 +70,24 @@ class TouristPlaceImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.place.name} - {self.caption}"
+    
+class Review(TimeStampedModel):
+    place = models.ForeignKey(TouristPlace, on_delete=models.CASCADE, 
+                              related_name='reviews')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, 
+                                   related_name='reviews')
+    rating = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5),
+        ]
+    )
+    comment = models.TextField()
+    
+    class Meta:
+        unique_together = ('place', 'user')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Review by {self.user.fullname} for {self.place.name}"
+    
