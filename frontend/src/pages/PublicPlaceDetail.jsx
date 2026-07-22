@@ -9,9 +9,7 @@ import PlaceInfo from "../components/place/PlaceInfo";
 import PlaceGallery from "../components/place/PlaceGallery";
 import PlaceMap from "../components/place/PlaceMap";
 import PlaceLocation from "../components/place/PlaceLocation";
-import AverageRating from "../components/reviews/AverageRating";
-import ReviewList from "../components/reviews/ReviewList";
-import ReviewForm from "../components/reviews/ReviewForm";
+import ReviewSection from "../components/reviews/ReviewSection";
 
 function PublicPlaceDetail() {
     const [place, setPlace] = useState(null);
@@ -59,44 +57,12 @@ function PublicPlaceDetail() {
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
 
                     <PlaceHero place={place} />
-
-
-                    <div className="p-8">
-                        <AverageRating
-                            averageRating={place.average_rating}
-                            reviewCount={place.review_count}
-                        />
-                    </div>
-                    <div className="p-8 border-t">
-
-                        <ReviewForm
-                            placeId={place.id}
-                            onReviewAdded={fetchPlace}
-                        />
-
-                    </div>
-
-                    <div className="p-8 border-t">
-
-                        <h2 className="text-3xl font-bold mb-6">
-                            Reviews
-                        </h2>
-
-                        <ReviewList
-                            reviews={place.reviews}
-                        />
-
-                    </div>
-                    <div className="p-8 border-t">
-                        <h2 className="text-3xl font-bold mb-6">
-                            Reviews
-                        </h2>
-
-                        <ReviewList reviews={place.reviews} />
-                    </div>
+                    <ReviewSection
+                        place={place}
+                        fetchPlace={fetchPlace}
+                    />
 
                     <PlaceInfo place={place} />
-
 
                     <PlaceGallery place={place} />
 

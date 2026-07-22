@@ -52,12 +52,22 @@ class ReviewSerializer(serializers.ModelSerializer):
         ]
     def validate(self, attrs):
         user = self.context["request"].user
-        place = attrs["place"]
 
-        if Review.objects.filter(
-            user=user,
-            place=place
-        ).exists():
+        place = attrs.get("place")
+
+        if place is None and self.instance:
+            place = self.instance.place
+
+        if (
+            Review.objects.filter(
+                user=user,
+                place=place,
+            )
+            .exclude(
+                id=self.instance.id if self.instance else None
+            )
+            .exists()
+        ):
             raise serializers.ValidationError(
                 "You have already reviewed this place."
             )

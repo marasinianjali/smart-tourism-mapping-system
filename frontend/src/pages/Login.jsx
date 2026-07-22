@@ -19,6 +19,9 @@ function Login() {
       localStorage.setItem("refresh", data.refresh);
 
       const profile = await getProfile();
+      console.log(profile);
+      localStorage.setItem("user_id", profile.id);
+      localStorage.setItem("full_name", profile.full_name);
       localStorage.setItem("role", profile.role);
 
       navigate("/places");
