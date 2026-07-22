@@ -122,12 +122,15 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = [ReviewPermission]
 
     def get_queryset(self):
-        queryset = Review.objects.all()
+        queryset = Review.objects.select_related(
+            'user','place'
+        )
 
-        place_id = self.request.query_params.get("place")
+        place_id = self.request.query_params.get('place')
 
         if place_id:
             queryset = queryset.filter(place_id=place_id)
         return queryset
+    
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

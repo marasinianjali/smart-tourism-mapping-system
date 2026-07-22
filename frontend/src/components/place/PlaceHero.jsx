@@ -1,4 +1,4 @@
-function PlaceHero({ place }) {
+function PlaceHero({ place, showStatus = false, }) {
 
     return (
 
@@ -24,20 +24,21 @@ function PlaceHero({ place }) {
                     <span className="bg-green-500 px-4 py-2 rounded-full text-sm font-medium">
                         {place.category_name}
                     </span>
-
-                    <span
-                        className={`
-            px-4 py-2 rounded-full text-sm font-semibold
-            ${place.status === "approved"
-                                ? "bg-green-100 text-green-700"
-                                : place.status === "pending"
-                                    ? "bg-yellow-100 text-yellow-700"
-                                    : "bg-red-100 text-red-700"
-                            }
-        `}
-                    >
-                        {place.status}
-                    </span>
+                    {showStatus && (
+                        <span
+                            className={`
+                            px-4 py-2 rounded-full text-sm font-semibold
+                             ${place.status === "approved"
+                                    ? "bg-green-100 text-green-700"
+                                    : place.status === "pending"
+                                        ? "bg-yellow-100 text-yellow-700"
+                                        : "bg-red-100 text-red-700"
+                                }
+                            `}
+                        >
+                            {place.status}
+                        </span>
+                    )}
 
                 </div>
 
@@ -52,7 +53,7 @@ function PlaceHero({ place }) {
                     📍 {place.district_name} • {place.province_name}
 
                 </p>
-               
+
             </div>
 
         </section>

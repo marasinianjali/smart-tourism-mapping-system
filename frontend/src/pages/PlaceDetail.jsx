@@ -7,6 +7,7 @@ import PlaceInfo from "../components/place/PlaceInfo";
 import PlaceGallery from "../components/place/PlaceGallery";
 import PlaceMap from "../components/place/PlaceMap";
 import PlaceLocation from "../components/place/PlaceLocation";
+import ReviewSection from "../components/reviews/ReviewSection";
 
 function PlaceDetail() {
     const [place, setPlace] = useState(null);
@@ -47,11 +48,16 @@ function PlaceDetail() {
                 </Link>
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
 
-                       <PlaceHero place={place} />
-                       <PlaceInfo place={place} />
-                       <PlaceGallery place={place} />
-                       <PlaceMap place={place} />
-                       <PlaceLocation place={place} />
+                    <PlaceHero place={place}
+                        showStatus={true} />
+                    <ReviewSection
+                        place={place}
+                        fetchPlace={fetchPlace}
+                    />
+                    <PlaceInfo place={place} />
+                    <PlaceGallery place={place} />
+                    <PlaceMap place={place} />
+                    <PlaceLocation place={place} />
 
                 </div>
 
