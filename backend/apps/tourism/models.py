@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.gis.db.models import PointField
 from apps.common.models import TimeStampedModel
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -44,11 +45,17 @@ class TouristPlace(TimeStampedModel):
     address = models.CharField(max_length=255, blank=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    location = PointField(
+        geography=True,
+        srid=4326,
+        null=True,
+        blank=True,
+    )
     status = models.CharField(
             max_length=20,
             choices=STATUS_CHOICES,
             default="pending",
-        )
+    )
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, 
                                    null=True, blank=True)
     approved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, 
