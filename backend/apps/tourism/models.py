@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point
 from apps.common.models import TimeStampedModel
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
-from apps.common.models import TimeStampedModel
 
 
 class Category(models.Model):
@@ -64,6 +64,15 @@ class TouristPlace(TimeStampedModel):
     rejection_reason = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.latitude and self.longitude:
+            self.location = Point(
+                float(self.longitude), 
+                float(self.latitude),
+                srid=4326
+            )
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name 

@@ -1,57 +1,26 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../api/axios";
 
-function PlacePopup({ place, places }) {
-  const calculateDistance = (
-    lat1,
-    lon1,
-    lat2,
-    lon2
-  ) => {
-    const R = 6371;
+function PlacePopup({ place }) {
 
-    const dLat =
-      (lat2 - lat1) * Math.PI / 180;
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  useEffect(() => {
+    fetchNearbyPlaces();
+  }, [place.id]);
 
-    const dLon =
-      (lon2 - lon1) * Math.PI / 180;
-
-    const a =
-      Math.sin(dLat / 2) *
-      Math.sin(dLat / 2) +
-      Math.cos(lat1 * Math.PI / 180) *
-      Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-
-    const c =
-      2 *
-      Math.atan2(
-        Math.sqrt(a),
-        Math.sqrt(1 - a)
+  const fetchNearbyPlaces = async () => {
+    try {
+      const response = await api.get(
+        `tourism/places/${place.id}/nearby/`
       );
 
-    return R * c;
+      setNearbyPlaces(response.data);
+
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const nearbyPlaces = places
-    .filter(
-      (p) => p.id !== place.id
-    )
-    .map((p) => ({
-      ...p,
-      distance:
-        calculateDistance(
-          Number(place.latitude),
-          Number(place.longitude),
-          Number(p.latitude),
-          Number(p.longitude)
-        ),
-    }))
-    .filter((p) => p.distance <= 50)
-    .sort(
-      (a, b) =>
-        a.distance - b.distance
-    )
-    .slice(0, 3);
 
   return (
     <div className="w-64">
@@ -88,15 +57,17 @@ function PlacePopup({ place, places }) {
         </h4>
 
         {nearbyPlaces.length > 0 ? (
-          <ul className="mt-2 space-y-1 text-sm text-gray-600">
+          <ul className="list-disc ml-5 mt-1">
             {nearbyPlaces.map((nearby) => (
+
               <li key={nearby.id}>
                 {nearby.name}
                 {" "}
                 (
-                {nearby.distance.toFixed(1)}
+                {nearby.distance}
                 km away)
               </li>
+
             ))}
           </ul>
         ) : (
