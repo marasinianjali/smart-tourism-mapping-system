@@ -98,6 +98,7 @@ class TouristPlaceSerializer(serializers.ModelSerializer):
     average_rating = serializers.SerializerMethodField()
     review_count = serializers.SerializerMethodField()
     reviews = ReviewSerializer(many=True, read_only=True)
+    distance = serializers.SerializerMethodField()
 
     class Meta:
         model = TouristPlace
@@ -127,6 +128,7 @@ class TouristPlaceSerializer(serializers.ModelSerializer):
             "average_rating",
             "review_count",
             "reviews",
+            "distance",
         ]
 
     def get_primary_image(self, obj):
@@ -158,4 +160,9 @@ class TouristPlaceSerializer(serializers.ModelSerializer):
 
     def get_review_count(self, obj):
         return obj.reviews.count()
+    
+    def get_distance(self, obj):
+        if hasattr(obj, "distance"):
+            return round(obj.distance.km, 2)
+        return None
 

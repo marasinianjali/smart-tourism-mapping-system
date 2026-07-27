@@ -8,6 +8,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status 
 from django.utils import timezone
+from django.contrib.gis.geos import Point
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.measure import D
+
 
 from .models import (Category, District, TouristPlace, TouristPlaceImage, 
                      Review)
@@ -95,7 +99,82 @@ class TouristPlaceViewSet(viewsets.ModelViewSet):
         return Response({
             "message": "Place rejected successfully"
         })
+    
+    @action(detail=True, methods=["get"])
+    def nearby(self, request, pk=None):
+        place = self.get_object()
 
+        nearby_places = (
+            TouristPlace.objects
+            .exclude(id=place.id)
+            .annotate(
+                distance=Distance(
+                    "location",
+                    place.location,
+                )
+            )
+            .filter(
+                location__distance_lte=(
+                    place.location,
+                    D(km=50),
+                )
+            )
+            .order_by("distance")[:3]
+        )
+
+        serializer = self.get_serializer(
+            nearby_places,
+            many=True,
+        )
+
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=["get"])
+    def radius(self, request):
+
+        lat = request.query_params.get("lat")
+        lng = request.query_params.get("lng")
+        radius = request.query_params.get("radius")
+
+        if not lat or not lng or not radius:
+            return Response(
+                {
+                    "error": "lat, lng and radius are required."
+                },
+                status=400,
+            )
+
+        point = Point(
+            float(lng),
+            float(lat),
+            srid=4326,
+        )
+
+        places = (
+            TouristPlace.objects
+            .annotate(
+                distance=Distance(
+                    "location",
+                    point,
+                )
+            )
+            .filter(
+                location__distance_lte=(
+                    point,
+                    D(km=float(radius)),
+                )
+            )
+            .order_by("distance")
+        )
+
+        serializer = self.get_serializer(
+            places,
+            many=True,
+        )
+
+        return Response(serializer.data)
+
+   
 class TouristPlaceImageViewSet(viewsets.ModelViewSet):
     queryset = TouristPlaceImage.objects.all()
     serializer_class = TouristPlaceImageSerializer
