@@ -43,8 +43,12 @@ class TouristPlace(TimeStampedModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
     address = models.CharField(max_length=255, blank=True)
+
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    
+    # GIS field used by PostGIS for spatial queries.
+    # Automatically synchronized from latitude and longitude.
     location = PointField(
         geography=True,
         srid=4326,
