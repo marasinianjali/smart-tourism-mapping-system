@@ -47,12 +47,38 @@ function PublicPlaceDetail() {
 
             <div className="max-w-5xl mx-auto py-8">
 
-                <Link
-                    to="/explore"
-                    className="inline-flex items-center text-green-600 hover:text-green-700 font-medium mb-6"
-                >
-                    ← Back to Explore
-                </Link>
+                <div className="flex gap-3 mb-6">
+
+                    <Link
+                        to="/explore"
+                        className="
+            inline-flex items-center
+            text-green-600
+            hover:text-green-700
+            font-medium
+        "
+                    >
+                        ← Back to Explore
+                    </Link>
+
+                    <Link
+                        to={`/map?destination=${place.id}`}
+                        className="
+            bg-green-600
+            hover:bg-green-700
+            text-white
+            px-5
+            py-2
+            rounded-xl
+            font-medium
+            no-underline
+        "
+                    >
+                        🧭 Get Directions
+                    </Link>
+
+                </div>
+
 
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
 
