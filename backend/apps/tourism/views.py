@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -11,13 +12,14 @@ from django.utils import timezone
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.measure import D
+import math
 
 
 from .models import (Category, District, TouristPlace, TouristPlaceImage, 
                      Review)
 from .serializers import( CategorySerializer, DistrictSerializer, 
                          TouristPlaceSerializer, TouristPlaceImageSerializer,
-                           ReviewSerializer)
+                           ReviewSerializer, TripPlannerSerializer)
 from .permissions import TouristPlacePermission, ReviewPermission
 from apps.accounts.permissions import IsMunicipalityAdminOrSuperAdmin
     
@@ -213,3 +215,66 @@ class ReviewViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+# This is an APIView because it is not backed by a model viewset.
+class TripPlannerView(APIView):
+    def post(self, request):
+        serializer = TripPlannerSerializer(
+            data=request.data
+        )
+        serializer.is_valid(
+            raise_exception=True
+        )
+        data = serializer.validated_data
+        province = data['province']
+        days = data['days']
+        categories = data['categories']
+
+        places = TouristPlace.objects.filter(
+            status="approved",
+            district__province=province,
+        )
+
+        if categories:
+            places = places.filter(
+                category_id__in=categories
+            )
+
+        places = places.order_by(
+            '-is_featured',
+            '-created_at',
+        )
+        places = list(places)
+        max_places = days * 3
+        places = places[:max_places]
+        places_per_day = math.ceil(
+            len(places) / days
+        )
+        itinerary = []
+        for day in range(days):
+
+            start = day * places_per_day
+            end = start + places_per_day
+
+            day_places = places[start:end]
+
+            if not day_places:
+                break
+
+            itinerary.append(
+                {
+                    "day": day + 1,
+                    "places": TouristPlaceSerializer(
+                        day_places,
+                        many=True,
+                        context={"request": request},
+                    ).data,
+                }
+            )
+        return Response(
+            {
+                "province": province,
+                "days": itinerary,
+            }
+        )
+        
