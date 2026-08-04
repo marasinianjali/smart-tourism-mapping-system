@@ -166,3 +166,18 @@ class TouristPlaceSerializer(serializers.ModelSerializer):
             return round(obj.distance.km, 2)
         return None
 
+class TripPlannerSerializer(serializers.Serializer):
+
+    province = serializers.ChoiceField(
+        choices=District.Province.choices,
+    )
+
+    days = serializers.IntegerField(
+        min_value=1,
+        max_value=30,
+    )
+
+    categories = serializers.ListField(
+        child=serializers.IntegerField(),
+        allow_empty=True,
+    )

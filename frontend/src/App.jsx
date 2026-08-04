@@ -22,6 +22,7 @@ import Provinces from "./pages/Provinces";
 import ProvinceDetail from "./pages/ProvinceDetail";
 import PublicMap from "./pages/PublicMap";
 import PublicPlaceDetail from "./pages/PublicPlaceDetail";
+import TripPlanner from "./pages/TripPlanner";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -41,6 +42,10 @@ function App() {
         <Route
           path="/explore"
           element={<Explore />}
+        />
+        <Route
+          path="/trip-planner"
+          element={<TripPlanner />}
         />
 
         <Route
