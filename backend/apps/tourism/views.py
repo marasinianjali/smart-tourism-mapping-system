@@ -218,6 +218,38 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 # This is an APIView because it is not backed by a model viewset.
 class TripPlannerView(APIView):
+    def order_places_by_distance(self, places):
+        ordered = []
+        remaining = places.copy()
+
+        if not remaining:
+            return ordered
+        current = remaining.pop(0)
+        ordered.append(current)
+
+        while remaining:
+            nearest = min(
+                remaining, 
+                key=lambda place: current.location.distance(place.location)
+            )
+            ordered.append(nearest)
+            remaining.remove(nearest)
+            current = nearest
+        return ordered
+    
+    def build_day(self, remaining_places):
+
+        if not remaining_places:
+            return [], []
+
+        current = remaining_places[0]
+
+        day_places = [current]
+
+        leftover = remaining_places[1:]
+
+        return day_places, leftover
+        
     def post(self, request):
         serializer = TripPlannerSerializer(
             data=request.data
@@ -245,6 +277,19 @@ class TripPlannerView(APIView):
             '-created_at',
         )
         places = list(places)
+        day_places, remaining = self.build_day(places)
+
+        print("TODAY")
+
+        for p in day_places:
+            print(p.name)
+
+        print("LEFT")
+
+        for p in remaining:
+            print(p.name)
+        
+
         max_places = days * 3
         places = places[:max_places]
         places_per_day = math.ceil(

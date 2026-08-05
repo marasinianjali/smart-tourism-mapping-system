@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/axios";
 import PublicLayout from "../components/PublicLayout";
 
@@ -75,7 +76,7 @@ function TripPlanner() {
                     days: days,
                     categories: selectedCategories,
                 }
-            );console.log(response.data);
+            ); console.log(response.data);
 
             setItinerary(response.data);
 
@@ -247,28 +248,97 @@ function TripPlanner() {
 
                                                 <div
                                                     key={place.id}
-                                                    className="mb-3"
+                                                    className="
+                                                        bg-white
+                                                        rounded-xl
+                                                        shadow-sm
+                                                        border
+                                                        p-4
+                                                        mb-4
+                                                        hover:shadow-md
+                                                        transition
+                                                    "
                                                 >
 
-                                                    <h4 className="font-semibold">
+                                                    <img
+                                                        src={
+                                                            place.primary_image
+                                                                ? `http://127.0.0.1:8000${place.primary_image}`
+                                                                : "/images/nepal1.webp"
+                                                        }
+                                                        alt={place.name}
+                                                        className="w-full h-44 object-cover rounded-lg"
+                                                    />
+
+                                                    <h4 className="text-lg font-bold mt-4">
                                                         {place.name}
                                                     </h4>
 
-                                                    <p className="text-gray-600">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        mt-2
+                                                        bg-green-100
+                                                        text-green-700
+                                                        px-3
+                                                        py-1
+                                                        rounded-full
+                                                        text-sm
+                                                    "
+                                                    >
                                                         {place.category_name}
-                                                    </p>
+                                                    </span>
 
-                                                    <p className="text-sm text-gray-500">
+                                                    <p className="mt-3 text-gray-600">
                                                         📍 {place.district_name}
                                                     </p>
+
+                                                    <p className="text-yellow-600 mt-1">
+                                                        ⭐ {place.average_rating ?? "N/A"}
+                                                    </p>
+                                                    <div className="flex gap-3 mt-5">
+
+                                                        <Link
+                                                            to={`/places/${place.id}`}
+                                                            className="
+            flex-1
+            bg-green-600
+            hover:bg-green-700
+            text-white
+            text-center
+            py-2
+            rounded-lg
+            no-underline
+        "
+                                                        >
+                                                            View Details
+                                                        </Link>
+
+                                                        <Link
+                                                            to={`/map?destination=${place.id}`}
+                                                            className="
+            flex-1
+            bg-blue-600
+            hover:bg-blue-700
+            text-white
+            text-center
+            py-2
+            rounded-lg
+            no-underline
+        "
+                                                        >
+                                                            Navigate
+                                                        </Link>
+
+                                                    </div>
 
                                                 </div>
 
                                             ))}
 
                                         </div>
-                                        
-   
+
+
 
                                     ))}
 
