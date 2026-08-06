@@ -217,26 +217,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 # This is an APIView because it is not backed by a model viewset.
-class TripPlannerView(APIView):
-    def order_places_by_distance(self, places):
-        ordered = []
-        remaining = places.copy()
+class TripPlannerView(APIView):  
+    MAX_PLACES_PER_DAY = 3
+    MAX_DAY_DISTANCE_KM = 10
 
-        if not remaining:
-            return ordered
-        current = remaining.pop(0)
-        ordered.append(current)
-
-        while remaining:
-            nearest = min(
-                remaining, 
-                key=lambda place: current.location.distance(place.location)
-            )
-            ordered.append(nearest)
-            remaining.remove(nearest)
-            current = nearest
-        return ordered
-    
     def build_day(self, remaining_places):
 
         if not remaining_places:
@@ -248,8 +232,44 @@ class TripPlannerView(APIView):
 
         leftover = remaining_places[1:]
 
+        while (
+            len(day_places) < self.MAX_PLACES_PER_DAY
+            and leftover
+        ):
+
+            nearest = (
+                TouristPlace.objects
+                .filter(
+                    id__in=[place.id for place in leftover]
+                )
+                .annotate(
+                    distance=Distance(
+                        "location",
+                        current.location,
+                    )
+                )
+                .order_by("distance")
+                .first()
+            )
+
+            if not nearest:
+                break
+
+            if nearest.distance.km > self.MAX_DAY_DISTANCE_KM:
+                break   
+
+            day_places.append(nearest)
+
+            leftover = [
+                place
+                for place in leftover
+                if place.id != nearest.id
+            ]
+
+            current = nearest
+
         return day_places, leftover
-        
+            
     def post(self, request):
         serializer = TripPlannerSerializer(
             data=request.data
@@ -290,18 +310,15 @@ class TripPlannerView(APIView):
             print(p.name)
         
 
-        max_places = days * 3
-        places = places[:max_places]
-        places_per_day = math.ceil(
-            len(places) / days
-        )
+        remaining_places = places
+
         itinerary = []
+
         for day in range(days):
 
-            start = day * places_per_day
-            end = start + places_per_day
-
-            day_places = places[start:end]
+            day_places, remaining_places = self.build_day(
+                remaining_places
+            )
 
             if not day_places:
                 break
@@ -312,7 +329,9 @@ class TripPlannerView(APIView):
                     "places": TouristPlaceSerializer(
                         day_places,
                         many=True,
-                        context={"request": request},
+                        context={
+                            "request": request
+                        },
                     ).data,
                 }
             )

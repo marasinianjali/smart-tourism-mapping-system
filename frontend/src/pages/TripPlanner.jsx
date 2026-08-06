@@ -93,6 +93,12 @@ function TripPlanner() {
         <PublicLayout>
 
             <div className="max-w-5xl mx-auto py-10">
+                {/* <h1>Trip Planner V2
+
+                - Better itinerary starting point
+                - Distance-aware clustering
+                - Travel time optimization
+                - Smart recommendations</h1> */}
 
                 <h1 className="text-3xl font-bold">
                     Plan Your Trip
